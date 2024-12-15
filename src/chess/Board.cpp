@@ -2,12 +2,12 @@
 
 using namespace chess;
 
-#include "Pawn.h"
-#include "Rook.h"
-#include "Knight.h"
-#include "Bishop.h"
-#include "Queen.h"
-#include "King.h"
+#include "./piece/Pawn.h"
+#include "./piece/Rook.h"
+#include "./piece/Knight.h"
+#include "./piece/Bishop.h"
+#include "./piece/Queen.h"
+#include "./piece/King.h"
 
 /**
  * Checks if the goal was reached from either the
