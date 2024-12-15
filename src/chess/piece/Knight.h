@@ -9,7 +9,7 @@ namespace chess
     public:
         Knight(Board& const board, const Point& const position, Player& const player);
 
-        virtual MoveResult validateMove(const Point& const point) const;
+        virtual MoveResult validateMove(const Point& const destination) const;
         virtual char marker() const;
         virtual int value() const;
     };
