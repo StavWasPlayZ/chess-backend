@@ -23,6 +23,8 @@ namespace chess
         const Point* getPosition() const;
         Board* getBoard() const;
 
+        bool isOnBoard() const;
+
         void onRemovedFromBoard();
 
     private:
