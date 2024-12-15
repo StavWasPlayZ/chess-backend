@@ -13,7 +13,7 @@ namespace chess
         Piece(Board& const board, const Point& const position, Player& const player);
         virtual ~Piece();
 
-        virtual MoveResult validateMove(const Point& const destination) const = 0;
+        virtual MoveResult validateMove(const Point& const destination) const;
         virtual char marker() const = 0;
         virtual int value() const = 0;
 

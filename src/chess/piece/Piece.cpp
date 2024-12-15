@@ -11,6 +11,16 @@ chess::Piece::~Piece()
     delete _pos;
 }
 
+MoveResult chess::Piece::validateMove(const Point &const destination) const
+{
+    if (destination.isOutOfBounds())
+    {
+        return MoveResult::OUT_OF_BOUNDS;
+    }
+
+    return MoveResult::VALID;
+}
+
 Player &chess::Piece::getPlayer() const
 {
     return this->_player;
