@@ -10,7 +10,7 @@ namespace chess
     {
     public:
         static constexpr int BOARD_SIZE = 8;
-
+        Board();
         ~Board();
 
         MoveResult movePiece(const std::string& const moveStr);
@@ -23,7 +23,28 @@ namespace chess
     private:
         Piece* _pieces[BOARD_SIZE][BOARD_SIZE];
 
-        Player players[2];
-        int playerTurn;
+        /**
+         * Populates the board with a new game.
+         * Assumes all preceding resources of this class were freed.
+         */
+        void populateBoard();
+
+        /**
+         * Frees the contents of this board.
+         */
+        void freeBoard();
+
+        enum class RowPopuplationType
+        {
+            NONE, PAWNS, ALL_ELSE
+        };
+        RowPopuplationType getRowPopulationType(const int row) const;
+
+
+        /**
+         * 0 = white, 1 = black
+         */
+        Player _players[2];
+        size_t _playerTurn;
     };
 }
