@@ -8,9 +8,16 @@ namespace chess
     class Player
     {
     public:
-        bool mayPerformCastling;
-        
+        ~Player();
+
+        bool mayPerformCastling() const;
+        void disallowCastling();
+
+        void addDevouredPiece(const Piece* const piece);
+        const std::vector<const Piece*> getDevouredPieces() const;
+
     private:
-        std::vector<const Piece&> devouredPieces;
+        std::vector<const Piece*> _devouredPieces;
+        bool _mayPerformCastling;
     };
 }
