@@ -21,6 +21,12 @@ MoveResult chess::Piece::validateMove(const Point &const destination) const
     return MoveResult::VALID;
 }
 
+void chess::Piece::setPosition(const Point &const point)
+{
+    delete _pos;
+    _pos = new Point(point);
+}
+
 Player &chess::Piece::getPlayer() const
 {
     return this->_player;
@@ -44,5 +50,6 @@ bool chess::Piece::isOnBoard() const
 void chess::Piece::onRemovedFromBoard()
 {
     this->_board = nullptr;
+    delete _pos;
     this->_pos = nullptr;
 }

@@ -16,9 +16,28 @@ namespace chess
         MoveResult movePiece(const std::string& const moveStr);
         MoveResult movePiece(const Point& const source, const Point& const destination);
 
-        bool devourPieceAt(const Point& const point);
+        /**
+         * Removes--but not frees--the piece at the given point.
+         * Returns: Whether there was such a piece to begin with.
+         */
+        bool removePieceAt(const Point& const point);
+        /**
+         * Removes--but not frees--the provided piece.
+         * Returns: Whether there was such a piece to begin with.
+         */
+        bool removePiece(const Piece& const piece);
 
-        const Piece* getPieceAt(const Point& point) const;
+
+        Piece* getPieceAt(const Point& point) const;
+        bool hasPieceAt(const Point& point) const;
+
+        Player& getPlayer(const int index);
+        Player& getPlayingPlayer();
+        /**
+         * Returns: The turn of the current player.
+         * * 0 = white, 1 = black.
+         */
+        int getPlayerTurn() const;
 
     private:
         Piece* _pieces[BOARD_SIZE][BOARD_SIZE];
@@ -27,18 +46,18 @@ namespace chess
          * Populates the board with a new game.
          * Assumes all preceding resources of this class were freed.
          */
-        void populateBoard();
+        void _populateBoard();
 
         /**
          * Frees the contents of this board.
          */
-        void freeBoard();
+        void _freeBoard();
 
         enum class RowPopuplationType
         {
             NONE, PAWNS, ALL_ELSE
         };
-        RowPopuplationType getRowPopulationType(const int row) const;
+        RowPopuplationType _getRowPopulationType(const int row) const;
 
 
         /**

@@ -13,7 +13,7 @@ namespace chess
         bool mayPerformCastling() const;
         void disallowCastling();
 
-        void addDevouredPiece(const Piece* const piece);
+        void devour(const Piece* const piece);
         const std::vector<const Piece*> getDevouredPieces() const;
 
     private:

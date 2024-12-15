@@ -13,7 +13,7 @@ using namespace chess;
  * Checks if the goal was reached from either the
  * beggining or end of an array.
  */
-static bool mirrorCheck(int index, int goal, int size)
+static bool mirrorCheck(int index, int goal, int size = Board::BOARD_SIZE)
 {
     return (index == goal) || ((index + 1) == (size - goal));
 }
@@ -21,19 +21,83 @@ static bool mirrorCheck(int index, int goal, int size)
 chess::Board::Board() :
     _playerTurn(0)
 {
-    populateBoard();
+    _populateBoard();
 }
 
 chess::Board::~Board()
 {
-    freeBoard();
+    _freeBoard();
 }
 
-void chess::Board::populateBoard()
+MoveResult chess::Board::movePiece(const Point &const source, const Point &const destination)
+{
+    Piece* const piece = getPieceAt(source);
+
+    MoveResult res = piece->validateMove(destination);
+
+    if (!isLegal(res))
+        return res;
+    
+    
+    const Piece* const overPiece = getPieceAt(destination);
+
+    if (overPiece != nullptr)
+    {
+        getPlayingPlayer().devour(overPiece);
+    }
+
+    piece->setPosition(destination);
+    this->_pieces[destination.y][destination.x] = piece;
+}
+
+bool chess::Board::removePieceAt(const Point &const point)
+{
+    if (!hasPieceAt(point))
+        return false;
+    
+    this->_pieces[point.y][point.x] = nullptr;
+    return true;
+}
+
+bool chess::Board::removePiece(const Piece &const piece)
+{
+    if (!piece.isOnBoard())
+        return false;
+    
+    removePieceAt(*(piece.getPosition()));
+    return true;
+}
+
+Piece *chess::Board::getPieceAt(const Point &point) const
+{
+    return this->_pieces[point.y][point.x];
+}
+
+bool chess::Board::hasPieceAt(const Point &point) const
+{
+    return getPieceAt(point) != nullptr;
+}
+
+Player &chess::Board::getPlayer(const int index)
+{
+    return this->_players[index];
+}
+
+Player &chess::Board::getPlayingPlayer()
+{
+    return getPlayer(getPlayerTurn());
+}
+
+int chess::Board::getPlayerTurn() const
+{
+    return this->_playerTurn;
+}
+
+void chess::Board::_populateBoard()
 {
     for (size_t i = 0; i < BOARD_SIZE; i++)
     {
-        RowPopuplationType populationType = getRowPopulationType(i);
+        RowPopuplationType populationType = _getRowPopulationType(i);
 
         for (size_t j = 0; j < BOARD_SIZE; j++)
         {
@@ -53,15 +117,15 @@ void chess::Board::populateBoard()
 
             Piece* piece;
 
-            if (mirrorCheck(j, 0, BOARD_SIZE))
+            if (mirrorCheck(j, 0))
             {
                 piece = new Rook(*this, Point(j, i), player);
             }
-            else if (mirrorCheck(j, 1, BOARD_SIZE))
+            else if (mirrorCheck(j, 1))
             {
                 piece = new Knight(*this, Point(j, i), player);
             }
-            else if (mirrorCheck(j, 2, BOARD_SIZE))
+            else if (mirrorCheck(j, 2))
             {
                 piece = new Bishop(*this, Point(j, i), player);
             }
@@ -80,7 +144,7 @@ void chess::Board::populateBoard()
     }
 }
 
-void chess::Board::freeBoard()
+void chess::Board::_freeBoard()
 {
     for (size_t i = 0; i < BOARD_SIZE; i++)
     {
@@ -92,12 +156,12 @@ void chess::Board::freeBoard()
     }
 }
 
-Board::RowPopuplationType chess::Board::getRowPopulationType(const int row) const
+Board::RowPopuplationType chess::Board::_getRowPopulationType(const int row) const
 {
     return
-        mirrorCheck(row, 0, BOARD_SIZE)
+        mirrorCheck(row, 0)
             ? RowPopuplationType::ALL_ELSE
-        : mirrorCheck(row, 1, BOARD_SIZE)
+        : mirrorCheck(row, 1)
             ? RowPopuplationType::PAWNS
         : RowPopuplationType::NONE;
 }

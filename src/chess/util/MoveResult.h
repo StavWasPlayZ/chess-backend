@@ -13,7 +13,7 @@ namespace chess
         NO_TOOL,
         FRIENDLY_FIRE, // best naming ive ever done fr
         SELF_CHECK,
-        INVALID_INDEXES,
+        OUT_OF_BOUNDS,
         ILLEGAL_MOVE,
         SAME_PLACE,
 
@@ -21,5 +21,4 @@ namespace chess
     };
 
     bool isLegal(const MoveResult MoveResult);
-    bool isIllegal(const MoveResult MoveResult);
 }

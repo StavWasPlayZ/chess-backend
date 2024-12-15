@@ -17,6 +17,8 @@ namespace chess
         virtual char marker() const = 0;
         virtual int value() const = 0;
 
+        void setPosition(const Point& const point);
+
         Player& getPlayer() const;
         /**
          * Position may be null after being taken off-board.
@@ -35,6 +37,6 @@ namespace chess
         /**
          * Position may be null after being taken off-board.
          */
-        Point* _pos;
+        const Point* _pos;
     };
 }
