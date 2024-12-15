@@ -7,7 +7,7 @@ namespace chess
     class Knight : public Piece
     {
     public:
-        Knight(Board& const board, const Point& const position);
+        Knight(Board& const board, const Point& const position, Player& const player);
 
         virtual MoveResult validateMove(const Point& const point) const;
         virtual char marker() const;

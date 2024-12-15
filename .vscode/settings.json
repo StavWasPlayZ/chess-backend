@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.ejs": "html",
+        "optional": "cpp",
+        "format": "cpp",
+        "system_error": "cpp"
+    }
+}

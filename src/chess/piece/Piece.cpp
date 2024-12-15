@@ -2,13 +2,18 @@
 
 using namespace chess;
 
-chess::Piece::Piece(Board &const board, const Point &const position) :
-    _board(&board), _pos(new Point(position))
+chess::Piece::Piece(Board &const board, const Point &const position, Player& const player) :
+    _board(&board), _pos(new Point(position)), _player(player)
 {}
 
 chess::Piece::~Piece()
 {
     delete _pos;
+}
+
+Player &chess::Piece::getPlayer() const
+{
+    return this->_player;
 }
 
 const Point *chess::Piece::getPosition() const

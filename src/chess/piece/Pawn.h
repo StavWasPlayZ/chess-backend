@@ -7,7 +7,7 @@ namespace chess
     class Pawn : public Piece
     {
     public:
-        Pawn(Board& const board, const Point& const position);
+        Pawn(Board& const board, const Point& const position, Player& const player);
 
         virtual MoveResult validateMove(const Point& const point) const;
         virtual char marker() const;
