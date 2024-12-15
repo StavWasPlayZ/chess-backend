@@ -15,6 +15,9 @@ namespace chess
 
         virtual MoveResult validateMove(const Point& const destination) const;
         virtual char marker() const = 0;
+        /**
+         * The value of this piece in points
+         */
         virtual int value() const = 0;
 
         void setPosition(const Point& const point);

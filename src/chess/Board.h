@@ -61,9 +61,11 @@ namespace chess
 
 
         /**
-         * 0 = white, 1 = black
+         * Must only contain 2 players:
+         * 0 = white, 1 = black.
+         * This is not an array becase Player has no default constructor.
          */
-        Player _players[2];
+        std::vector<Player> _players;
         size_t _playerTurn;
     };
 }

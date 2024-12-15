@@ -21,6 +21,12 @@ static bool mirrorCheck(int index, int goal, int size = Board::BOARD_SIZE)
 chess::Board::Board() :
     _playerTurn(0)
 {
+    this->_players.reserve(2);
+    for (size_t i = 0; i < 2; i++)
+    {
+        this->_players.push_back(Player(*this));
+    }
+
     _populateBoard();
 }
 

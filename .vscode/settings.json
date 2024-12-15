@@ -3,6 +3,7 @@
         "*.ejs": "html",
         "optional": "cpp",
         "format": "cpp",
-        "system_error": "cpp"
+        "system_error": "cpp",
+        "*.tcc": "cpp"
     }
 }
