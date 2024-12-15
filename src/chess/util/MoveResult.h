@@ -4,11 +4,22 @@
 
 namespace chess
 {
-    struct MoveResult
+    enum class MoveResult
     {
-        // MoveResult(const int statusCode, const Piece* const devouredPiece);
-        MoveResult(const int statusCode);
-        const int statusCode;
-        // const Piece* const devouredPiece;
+        VALID,
+        CHECK,
+        
+        // Errors
+        NO_TOOL,
+        FRIENDLY_FIRE, // best naming ive ever done fr
+        SELF_CHECK,
+        INVALID_INDEXES,
+        ILLEGAL_MOVE,
+        SAME_PLACE,
+
+        CHECKMATE
     };
+
+    bool isLegal(const MoveResult MoveResult);
+    bool isIllegal(const MoveResult MoveResult);
 }
