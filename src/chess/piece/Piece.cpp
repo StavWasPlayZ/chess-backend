@@ -2,7 +2,7 @@
 
 using namespace chess;
 
-chess::Piece::Piece(Board &const board, const Point &const position, Player& const player) :
+chess::Piece::Piece(Board &board, const Point &position, Player& player) :
     _board(&board), _pos(new Point(position)), _player(player)
 {}
 
@@ -11,7 +11,7 @@ chess::Piece::~Piece()
     delete _pos;
 }
 
-MoveResult chess::Piece::validateMove(const Point &const destination) const
+MoveResult chess::Piece::validateMove(const Point &destination) const
 {
     if (*this->getPosition() == destination)
     {
@@ -27,7 +27,7 @@ MoveResult chess::Piece::validateMove(const Point &const destination) const
     return MoveResult::LEGAL_MOVE;
 }
 
-void chess::Piece::setPosition(const Point &const point)
+void chess::Piece::setPosition(const Point &point)
 {
     *_pos = Point(point);
 }

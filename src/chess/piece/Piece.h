@@ -10,17 +10,17 @@ namespace chess
     class Piece
     {
     public:
-        Piece(Board& const board, const Point& const position, Player& const player);
+        Piece(Board& board, const Point& position, Player& player);
         virtual ~Piece();
 
-        virtual MoveResult validateMove(const Point& const destination) const;
+        virtual MoveResult validateMove(const Point& destination) const;
         virtual char marker() const = 0;
         /**
          * The value of this piece in points
          */
         virtual int value() const = 0;
 
-        void setPosition(const Point& const point);
+        void setPosition(const Point& point);
 
         Player& getPlayer() const;
         /**
@@ -36,7 +36,7 @@ namespace chess
         void onRemovedFromBoard();
 
     private:
-        Player& const _player;
+        Player& _player;
         Board* _board;
         /**
          * Position may be null after being taken off-board.

@@ -7,9 +7,9 @@ namespace chess
     class Queen : public Piece
     {
     public:
-        Queen(Board& const board, const Point& const position, Player& const player);
+        Queen(Board& board, const Point& position, Player& player);
 
-        virtual MoveResult validateMove(const Point& const destination) const;
+        virtual MoveResult validateMove(const Point& destination) const;
         virtual char marker() const;
         virtual int value() const;
     };

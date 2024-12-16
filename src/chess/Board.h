@@ -13,19 +13,19 @@ namespace chess
         Board();
         ~Board();
 
-        MoveResult movePiece(const std::string& const moveStr);
-        MoveResult movePiece(const Point& const source, const Point& const destination);
+        MoveResult movePiece(const std::string& moveStr);
+        MoveResult movePiece(const Point& source, const Point& destination);
 
         /**
          * Removes--but not frees--the piece at the given point.
          * Returns: Whether there was such a piece to begin with.
          */
-        bool removePieceAt(const Point& const point);
+        bool removePieceAt(const Point& point);
         /**
          * Removes--but not frees--the provided piece.
          * Returns: Whether there was such a piece to begin with.
          */
-        bool removePiece(const Piece& const piece);
+        bool removePiece(const Piece& piece);
 
 
         Piece* getPieceAt(const Point& point) const;

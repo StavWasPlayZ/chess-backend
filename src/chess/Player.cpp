@@ -2,7 +2,7 @@
 
 using namespace chess;
 
-chess::Player::Player(Board& const board, const int number) :
+chess::Player::Player(Board& board, const int number) :
     _mayPerformCastling(true), _board(board), number(number)
 {}
 

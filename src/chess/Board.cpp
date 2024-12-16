@@ -35,7 +35,7 @@ chess::Board::~Board()
     _freeBoard();
 }
 
-MoveResult chess::Board::movePiece(const Point &const source, const Point &const destination)
+MoveResult chess::Board::movePiece(const Point &source, const Point &destination)
 {
     if (source.isOutOfBounds() || destination.isOutOfBounds())
     {
@@ -67,7 +67,7 @@ MoveResult chess::Board::movePiece(const Point &const source, const Point &const
     piece->onMoved(overPiece);
 }
 
-bool chess::Board::removePieceAt(const Point &const point)
+bool chess::Board::removePieceAt(const Point &point)
 {
     if (!hasPieceAt(point))
         return false;
@@ -76,7 +76,7 @@ bool chess::Board::removePieceAt(const Point &const point)
     return true;
 }
 
-bool chess::Board::removePiece(const Piece &const piece)
+bool chess::Board::removePiece(const Piece &piece)
 {
     if (!piece.isOnBoard())
         return false;
@@ -124,7 +124,7 @@ void chess::Board::_populateBoard()
                 continue;
             }
 
-            Player& const player = this->_players[(i < (BOARD_SIZE / 2)) ? 1 : 0];
+            Player& player = this->_players[(i < (BOARD_SIZE / 2)) ? 1 : 0];
 
             if (populationType == RowPopuplationType::PAWNS)
             {

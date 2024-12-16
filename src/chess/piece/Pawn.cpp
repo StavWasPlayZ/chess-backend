@@ -2,11 +2,11 @@
 
 using namespace chess;
 
-chess::Pawn::Pawn(Board &const board, const Point &const position, Player &const player)
+chess::Pawn::Pawn(Board &board, const Point &position, Player &player)
     : Piece(board, position, player), wasMoved(false)
 {}
 
-MoveResult chess::Pawn::validateMove(const Point &const destination) const
+MoveResult chess::Pawn::validateMove(const Point &destination) const
 {
     {
         const MoveResult moveRes = Piece::validateMove(destination);

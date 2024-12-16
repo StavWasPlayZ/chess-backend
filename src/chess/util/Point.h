@@ -6,7 +6,7 @@ namespace chess
     struct Point
     {
         Point(const int x, const int y);
-        static Point fromChessNotation(const std::string& const chessNotation);
+        static Point fromChessNotation(const std::string& chessNotation);
         int x, y;
 
         /**
@@ -15,7 +15,7 @@ namespace chess
          */
         bool isOutOfBounds() const;
 
-        Point displacementFrom(const Point& const other) const;
+        Point displacementFrom(const Point& other) const;
 
         Point& operator=(const Point& other);
         bool operator==(const Point& other) const;

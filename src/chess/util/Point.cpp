@@ -9,7 +9,7 @@ chess::Point::Point(const int x, const int y) :
     x(x), y(y)
 {}
 
-Point chess::Point::fromChessNotation(const std::string &const chessNotation)
+Point chess::Point::fromChessNotation(const std::string &chessNotation)
 {
     if (chessNotation.length() != 2)
         throw std::invalid_argument("Invalid chess notation: Chess notation may only be of length 2.");
@@ -29,7 +29,7 @@ bool chess::Point::isOutOfBounds() const
         || (x >= Board::BOARD_SIZE) || (y >= Board::BOARD_SIZE);
 }
 
-Point chess::Point::displacementFrom(const Point &const other) const
+Point chess::Point::displacementFrom(const Point &other) const
 {
     return Point(
         other.x - this->x,
