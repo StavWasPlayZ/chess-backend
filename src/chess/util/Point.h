@@ -16,6 +16,7 @@ namespace chess
         bool isOutOfBounds() const;
 
         Point displacementFrom(const Point& other) const;
+        Point normalize() const;
 
 
         Point operator+(const Point& other) const;
