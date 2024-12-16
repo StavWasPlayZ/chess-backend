@@ -2,8 +2,8 @@
 
 using namespace chess;
 
-chess::Player::Player(Board& const board) :
-    _mayPerformCastling(true), _board(board)
+chess::Player::Player(Board& const board, const int number) :
+    _mayPerformCastling(true), _board(board), number(number)
 {}
 
 chess::Player::~Player()
@@ -50,4 +50,9 @@ int chess::Player::getPointsTotal() const
     }
 
     return sum;
+}
+
+bool chess::Player::operator==(const Player &other) const
+{
+    return this->number == other.number;
 }

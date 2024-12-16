@@ -8,8 +8,10 @@ namespace chess
     class Player
     {
     public:
-        Player(Board& const board);
+        Player(Board& const board, const int number);
         ~Player();
+
+        const int number;
 
         bool mayPerformCastling() const;
         void disallowCastling();
@@ -20,6 +22,8 @@ namespace chess
         const std::vector<const Piece*> getDevouredPieces() const;
 
         int getPointsTotal() const;
+
+        bool operator==(const Player& other) const;
 
     private:
         Board& const _board;

@@ -15,7 +15,10 @@ namespace chess
          */
         bool isOutOfBounds() const;
 
+        Point displacementFrom(const Point& const other) const;
+
         Point& operator=(const Point& other);
+        bool operator==(const Point& other) const;
 
         std::string toChessNotation() const;
     };

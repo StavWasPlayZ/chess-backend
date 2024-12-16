@@ -24,7 +24,7 @@ chess::Board::Board() :
     this->_players.reserve(2);
     for (size_t i = 0; i < 2; i++)
     {
-        this->_players.push_back(Player(*this));
+        this->_players.push_back(Player(*this, i));
     }
 
     _populateBoard();
@@ -37,7 +37,16 @@ chess::Board::~Board()
 
 MoveResult chess::Board::movePiece(const Point &const source, const Point &const destination)
 {
+    if (source.isOutOfBounds() || destination.isOutOfBounds())
+    {
+        return MoveResult::OUT_OF_BOUNDS;
+    }
+
     Piece* const piece = getPieceAt(source);
+    if (piece == nullptr)
+    {
+        return MoveResult::NO_TOOL;
+    }
 
     MoveResult res = piece->validateMove(destination);
 

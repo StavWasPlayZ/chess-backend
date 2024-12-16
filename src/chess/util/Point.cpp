@@ -29,10 +29,23 @@ bool chess::Point::isOutOfBounds() const
         || (x >= Board::BOARD_SIZE) || (y >= Board::BOARD_SIZE);
 }
 
+Point chess::Point::displacementFrom(const Point &const other) const
+{
+    return Point(
+        other.x - this->x,
+        other.y - this->y
+    );
+}
+
 Point &chess::Point::operator=(const Point &other)
 {
     this->x = other.x;
     this->y = other.y;
+}
+
+bool chess::Point::operator==(const Point &other) const
+{
+    return (this->x == other.x) && (this->y == other.y);
 }
 
 std::string chess::Point::toChessNotation() const
