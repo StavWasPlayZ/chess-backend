@@ -51,6 +51,8 @@ MoveResult chess::Pawn::validateMove(const Point &destination) const
 
         return MoveResult::LEGAL_MOVE;
     }
+
+    return MoveResult::ILLEGAL_MOVE;
 }
 
 char chess::Pawn::marker() const

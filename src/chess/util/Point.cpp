@@ -37,6 +37,21 @@ Point chess::Point::displacementFrom(const Point &other) const
     );
 }
 
+Point chess::Point::operator+(const Point &other) const
+{
+    return Point(this->x + other.x, this->y + other.y);
+}
+
+Point chess::Point::operator*(const Point &other) const
+{
+    return Point(this->x * other.x, this->y * other.y);
+}
+
+Point chess::Point::operator*(const int scaler) const
+{
+    return Point(this->x * scaler, this->y * scaler);
+}
+
 Point &chess::Point::operator=(const Point &other)
 {
     this->x = other.x;

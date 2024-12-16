@@ -65,3 +65,14 @@ char chess::Piece::asPlayerMarker(const char marker) const
 {
     return (getPlayer().number == 0) ? marker : toupper(marker);
 }
+
+bool chess::Piece::isInterferenceInRoute(const Point &direction, const int length) const
+{
+    for (size_t i = 1; i < length; i++)
+    {
+        if (getBoard()->getPieceAt(*getPosition() + direction * i) != nullptr)
+            return true;
+    }
+
+    return false;
+}

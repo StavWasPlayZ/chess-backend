@@ -37,6 +37,11 @@ namespace chess
 
     protected:
         char asPlayerMarker(const char marker) const;
+        /**
+         * Checks if any pieces are to be found on the board
+         * from this piece's position to the specified goal.
+         */
+        bool isInterferenceInRoute(const Point& direction, const int length) const;
 
     private:
         Player& _player;

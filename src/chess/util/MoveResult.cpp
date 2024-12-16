@@ -10,7 +10,7 @@ static constexpr chess::MoveResult LEGAL_RESULTS[LEGAL_RESULTS_LEN] = {
     MoveResult::CHECKMATE
 };
 
-bool chess::isLegal(const MoveResult moveResult)
+bool chess::util::isLegal(const MoveResult moveResult)
 {
     for (size_t i = 0; i < LEGAL_RESULTS_LEN; i++)
     {

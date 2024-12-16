@@ -17,6 +17,11 @@ namespace chess
 
         Point displacementFrom(const Point& other) const;
 
+
+        Point operator+(const Point& other) const;
+        Point operator*(const Point& other) const;
+        Point operator*(const int other) const;
+
         Point& operator=(const Point& other);
         bool operator==(const Point& other) const;
 
