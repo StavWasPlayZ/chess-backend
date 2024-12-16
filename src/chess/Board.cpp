@@ -50,7 +50,7 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
 
     MoveResult res = piece->validateMove(destination);
 
-    if (!isLegal(res))
+    if (!util::isLegal(res))
         return res;
     
     

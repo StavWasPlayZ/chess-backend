@@ -10,7 +10,7 @@ MoveResult chess::Pawn::validateMove(const Point &destination) const
 {
     {
         const MoveResult moveRes = Piece::validateMove(destination);
-        if (!isLegal(moveRes))
+        if (!util::isLegal(moveRes))
             return moveRes;
     }
     

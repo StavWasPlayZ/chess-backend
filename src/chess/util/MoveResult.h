@@ -20,5 +20,8 @@ namespace chess
         CHECKMATE
     };
 
-    bool isLegal(const MoveResult MoveResult);
+    namespace util
+    {
+        bool isLegal(const MoveResult MoveResult);
+    }
 }
