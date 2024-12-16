@@ -53,5 +53,5 @@ char chess::Bishop::marker() const
 
 int chess::Bishop::value() const
 {
-    return 9;
+    return 3;
 }
