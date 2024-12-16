@@ -61,7 +61,7 @@ void chess::Piece::onRemovedFromBoard()
     this->_pos = nullptr;
 }
 
-char chess::Piece::asPlayerMarker(const char marker)
+char chess::Piece::asPlayerMarker(const char marker) const
 {
     return (getPlayer().number == 0) ? marker : toupper(marker);
 }
