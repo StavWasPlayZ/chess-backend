@@ -6,6 +6,7 @@ namespace chess
     struct Point
     {
         Point(const int x, const int y);
+        static Point fromChessNotation(const std::string& const chessNotation);
         int x, y;
 
         /**

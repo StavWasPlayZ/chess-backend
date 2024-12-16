@@ -1,12 +1,27 @@
 #include "Point.h"
 
 #include "../Board.h"
+#include <stdexcept>
 
 using namespace chess;
 
 chess::Point::Point(const int x, const int y) :
     x(x), y(y)
 {}
+
+Point chess::Point::fromChessNotation(const std::string &const chessNotation)
+{
+    if (chessNotation.length() != 2)
+        throw std::invalid_argument("Invalid chess notation: Chess notation may only be of length 2.");
+
+    if (!(
+           ('a' <= chessNotation[0]) && (chessNotation[0] <= 'z')
+        && ('0' <= chessNotation[1]) && (chessNotation[1] <= '9')
+    ))
+        throw std::invalid_argument("Invalid chess notation: String must be a character followed by a number.");
+
+    return Point(chessNotation[0] - 'a', chessNotation[1] - '0');
+}
 
 bool chess::Point::isOutOfBounds() const
 {
