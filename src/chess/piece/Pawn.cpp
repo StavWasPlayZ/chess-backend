@@ -55,12 +55,12 @@ MoveResult chess::Pawn::validateMove(const Point &destination) const
 
 char chess::Pawn::marker() const
 {
-    return 0;
+    return asPlayerMarker('p');
 }
 
 int chess::Pawn::value() const
 {
-    return 0;
+    return 1;
 }
 
 void chess::Pawn::onMoved(const Piece *const devouredPiece)
