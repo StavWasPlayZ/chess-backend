@@ -63,6 +63,8 @@ MoveResult chess::Board::movePiece(const Point &const source, const Point &const
 
     piece->setPosition(destination);
     this->_pieces[destination.y][destination.x] = piece;
+
+    piece->onMoved(overPiece);
 }
 
 bool chess::Board::removePieceAt(const Point &const point)

@@ -5,7 +5,7 @@ using namespace chess;
 #define LEGAL_RESULTS_LEN 3
 
 static constexpr chess::MoveResult LEGAL_RESULTS[LEGAL_RESULTS_LEN] = {
-    MoveResult::VALID,
+    MoveResult::LEGAL_MOVE,
     MoveResult::CHECK,
     MoveResult::CHECKMATE
 };

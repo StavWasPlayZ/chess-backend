@@ -11,6 +11,9 @@ namespace chess
         Player(Board& const board, const int number);
         ~Player();
 
+        /**
+         * 0 = white, 1 = black.
+         */
         const int number;
 
         bool mayPerformCastling() const;

@@ -13,6 +13,8 @@ namespace chess
         virtual char marker() const;
         virtual int value() const;
 
+        virtual void onMoved(const Piece* const devouredPiece) override;
+
     private:
         /**
          * Used to determine the first double-jump

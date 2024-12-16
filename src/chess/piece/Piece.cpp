@@ -17,14 +17,14 @@ MoveResult chess::Piece::validateMove(const Point &const destination) const
     {
         return MoveResult::SAME_PLACE;
     }
-    
+
     const Piece* const destPiece = getBoard()->getPieceAt(destination);
     if ((destPiece != nullptr) && (destPiece->getPlayer() == this->getPlayer()))
     {
         return MoveResult::FRIENDLY_FIRE;
     }
 
-    return MoveResult::VALID;
+    return MoveResult::LEGAL_MOVE;
 }
 
 void chess::Piece::setPosition(const Point &const point)
@@ -51,6 +51,8 @@ bool chess::Piece::isOnBoard() const
 {
     return getBoard() != nullptr;
 }
+
+void chess::Piece::onMoved(const Piece* const devouredPiece) {}
 
 void chess::Piece::onRemovedFromBoard()
 {

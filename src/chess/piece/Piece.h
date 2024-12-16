@@ -32,6 +32,7 @@ namespace chess
 
         bool isOnBoard() const;
 
+        virtual void onMoved(const Piece* const devouredPiece);
         void onRemovedFromBoard();
 
     private:

@@ -6,7 +6,7 @@ namespace chess
 {
     enum class MoveResult
     {
-        VALID,
+        LEGAL_MOVE,
         CHECK,
         
         // Errors
