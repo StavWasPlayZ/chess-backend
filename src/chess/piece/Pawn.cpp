@@ -2,8 +2,8 @@
 
 using namespace chess;
 
-chess::Pawn::Pawn(Board &board, const Point &position, Player &player)
-    : Piece(board, position, player), wasMoved(false)
+chess::Pawn::Pawn(Board &board, const Point &position, Player &player) :
+    Piece(board, position, player), wasMoved(false)
 {}
 
 MoveResult chess::Pawn::validateMove(const Point &destination) const
