@@ -14,36 +14,7 @@ MoveResult chess::Rook::validateMove(const Point &destination) const
             return moveRes;
     }
     
-    const Point displacement = getPosition()->displacementFrom(destination);
-
-    // May only move along one axis
-    if ((displacement.x != 0) && (displacement.y != 0))
-        return MoveResult::ILLEGAL_MOVE;
-
-    if (displacement.x != 0)
-    {
-        int normal = (displacement.x > 0) ? 1 : -1;
-
-        if (isInterferenceInRoute(Point(normal, 0), abs(displacement.x)))
-        {
-            return MoveResult::ILLEGAL_MOVE;
-        }
-
-        return MoveResult::LEGAL_MOVE;
-    }
-    else
-    {
-        int normal = (displacement.y > 0) ? 1 : -1;
-
-        if (isInterferenceInRoute(Point(0, normal), abs(displacement.y)))
-        {
-            return MoveResult::ILLEGAL_MOVE;
-        }
-
-        return MoveResult::LEGAL_MOVE;
-    }
-
-    return MoveResult::LEGAL_MOVE;
+    return validateOrthogonalMovement(destination);
 }
 
 char chess::Rook::marker() const

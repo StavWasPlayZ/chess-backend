@@ -76,3 +76,35 @@ bool chess::Piece::isInterferenceInRoute(const Point &direction, const int lengt
 
     return false;
 }
+
+
+MoveResult chess::Piece::validateOrthogonalMovement(const Point &destination) const
+{
+    const Point displacement = getPosition()->displacementFrom(destination);
+
+    // May only move along 1 axis
+    if ((displacement.x != 0) && (displacement.y != 0))
+        return MoveResult::ILLEGAL_MOVE;
+
+    const int length = abs((displacement.x == 0) ? displacement.y : displacement.x);
+
+    if (isInterferenceInRoute(displacement.normalize(), length))
+        return MoveResult::ILLEGAL_MOVE;
+
+    return MoveResult::LEGAL_MOVE;
+}
+
+MoveResult chess::Piece::validateDiagonalMovement(const Point &destination) const
+{
+    const Point displacement = getPosition()->displacementFrom(destination);
+    const int length = abs(displacement.x);
+
+    // May only move when both axis are of the same value
+    if (length != abs(displacement.y))
+        return MoveResult::ILLEGAL_MOVE;
+
+    if (isInterferenceInRoute(displacement.normalize(), length))
+        return MoveResult::ILLEGAL_MOVE;
+
+    return MoveResult::LEGAL_MOVE;
+}

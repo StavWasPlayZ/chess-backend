@@ -43,6 +43,9 @@ namespace chess
          */
         bool isInterferenceInRoute(const Point& direction, const int length) const;
 
+        MoveResult validateOrthogonalMovement(const Point& destination) const;
+        MoveResult validateDiagonalMovement(const Point& destination) const;
+
     private:
         Player& _player;
         Board* _board;

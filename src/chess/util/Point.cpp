@@ -37,6 +37,17 @@ Point chess::Point::displacementFrom(const Point &other) const
     );
 }
 
+static int normalizeI(const int num)
+{
+    return (num == 0) ? 0
+        : (num > 0) ? 1 : -1;
+}
+
+Point chess::Point::normalize() const
+{
+    return Point(normalizeI(this->x), normalizeI(this->y));
+}
+
 Point chess::Point::operator+(const Point &other) const
 {
     return Point(this->x + other.x, this->y + other.y);
