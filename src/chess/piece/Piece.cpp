@@ -23,8 +23,7 @@ MoveResult chess::Piece::validateMove(const Point &const destination) const
 
 void chess::Piece::setPosition(const Point &const point)
 {
-    delete _pos;
-    _pos = new Point(point);
+    *_pos = Point(point);
 }
 
 Player &chess::Piece::getPlayer() const

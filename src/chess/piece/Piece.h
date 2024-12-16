@@ -40,6 +40,6 @@ namespace chess
         /**
          * Position may be null after being taken off-board.
          */
-        const Point* _pos;
+        Point* _pos;
     };
 }
