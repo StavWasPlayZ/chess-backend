@@ -18,14 +18,23 @@ namespace chess
 
         /**
          * Removes--but not frees--the piece at the given point.
+         * Its stored position will remain unchanged.
          * Returns: Whether there was such a piece to begin with.
          */
         bool removePieceAt(const Point& point);
         /**
          * Removes--but not frees--the provided piece.
+         * Its stored position will remain unchanged.
          * Returns: Whether there was such a piece to begin with.
          */
         bool removePiece(const Piece& piece);
+
+        /**
+         * Returns: The player that has a check status
+         * in this game.
+         * Null for none.
+         */
+        Player* getCheckedPlayer() const;
 
 
         Piece* getPieceAt(const Point& point) const;
@@ -41,6 +50,8 @@ namespace chess
 
     private:
         Piece* _pieces[BOARD_SIZE][BOARD_SIZE];
+
+        void _setPieceAt(const Point& pos, Piece& piece);
 
         /**
          * Populates the board with a new game.

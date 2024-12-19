@@ -54,17 +54,34 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
         return res;
     
     
-    const Piece* const overPiece = getPieceAt(destination);
+    Piece* const overPiece = getPieceAt(destination);
+
+    removePieceAt(source);
+    _setPieceAt(destination, *piece);
+
+    // Check check status
+    const Player* const checkedPlayer = getCheckedPlayer();
+
+    // Player self-checked; revert board
+    if (*checkedPlayer == piece->getPlayer())
+    {
+        _setPieceAt(source, *piece);
+        _setPieceAt(destination, *overPiece);
+
+        return MoveResult::SELF_CHECK;
+    }
 
     if (overPiece != nullptr)
     {
         getPlayingPlayer().devour(overPiece);
     }
 
-    piece->setPosition(destination);
-    this->_pieces[destination.y][destination.x] = piece;
-
     piece->onMoved(overPiece);
+
+    if (checkedPlayer != nullptr)
+        return MoveResult::CHECK;
+
+    return res;
 }
 
 bool chess::Board::removePieceAt(const Point &point)
@@ -83,6 +100,11 @@ bool chess::Board::removePiece(const Piece &piece)
     
     removePieceAt(*(piece.getPosition()));
     return true;
+}
+
+Player *chess::Board::getCheckedPlayer() const
+{
+    return nullptr;
 }
 
 Piece *chess::Board::getPieceAt(const Point &point) const
@@ -108,6 +130,12 @@ Player &chess::Board::getPlayingPlayer()
 int chess::Board::getPlayerTurn() const
 {
     return this->_playerTurn;
+}
+
+void chess::Board::_setPieceAt(const Point& pos, Piece& piece)
+{
+    this->_pieces[pos.y][pos.x] = &piece;
+    piece.setPosition(pos);
 }
 
 void chess::Board::_populateBoard()
@@ -152,7 +180,7 @@ void chess::Board::_populateBoard()
             }
             else if (j == 4)
             {
-                piece = new Queen(*this, Point(j, i), player);
+                piece = new King(*this, Point(j, i), player);
             }
             // Should be no more.
 
