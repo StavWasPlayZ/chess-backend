@@ -28,6 +28,11 @@ namespace chess
 
         bool operator==(const Player& other) const;
 
+        /**
+         * Gets the other player on the board
+         */
+        Player& getOther() const;
+
     private:
         Board& _board;
 

@@ -29,12 +29,25 @@ namespace chess
          */
         bool removePiece(const Piece& piece);
 
+        // IMPL NOTE:
+        // Could be done that there will be an
+        // "updateCheckStatus" that updates the players'
+        // fields to contain weather each have a check,
+        // and these functions will return it.
+        // Another is that check and checkmate are
+        // evaluated seperately and individually,
+        // and we may perform these operations directly
+        // in these methods.
         /**
-         * Returns: The player that has a check status
-         * in this game.
+         * Returns: The player that has a check status.
          * Null for none.
          */
-        Player* getCheckedPlayer() const;
+        Player* getCheckPlayer() const;
+        /**
+         * Returns: The player that has a checkmate status.
+         * Null for none.
+         */
+        Player* getCheckmatePlayer() const;
 
 
         Piece* getPieceAt(const Point& point) const;

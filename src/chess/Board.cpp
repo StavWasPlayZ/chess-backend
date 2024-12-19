@@ -59,18 +59,22 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
     removePieceAt(source);
     _setPieceAt(destination, *piece);
 
-    // Check check status
-    const Player* const checkedPlayer = getCheckedPlayer();
+    // Check for self-check
+    const Player* const checkPlayer = getCheckPlayer();
+    const Player& thisPlayer = piece->getPlayer();
 
-    // Player self-checked; revert board
-    if (*checkedPlayer == piece->getPlayer())
+    if (thisPlayer.getOther() == *checkPlayer)
     {
+        // Revert board
         _setPieceAt(source, *piece);
         _setPieceAt(destination, *overPiece);
+
+        //NOTE: Re-do check statuses if necessary
 
         return MoveResult::SELF_CHECK;
     }
 
+    // There was already a piece at the destination
     if (overPiece != nullptr)
     {
         getPlayingPlayer().devour(overPiece);
@@ -78,8 +82,15 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
 
     piece->onMoved(overPiece);
 
-    if (checkedPlayer != nullptr)
+    // Check check status (for result)
+    // Can only be this player (per last check)
+    if (checkPlayer != nullptr)
+    {
+        if (thisPlayer == *getCheckmatePlayer())
+            return MoveResult::CHECKMATE;
+
         return MoveResult::CHECK;
+    }
 
     return res;
 }
@@ -102,7 +113,12 @@ bool chess::Board::removePiece(const Piece &piece)
     return true;
 }
 
-Player *chess::Board::getCheckedPlayer() const
+Player *chess::Board::getCheckPlayer() const
+{
+    return nullptr;
+}
+
+Player *chess::Board::getCheckmatePlayer() const
 {
     return nullptr;
 }
