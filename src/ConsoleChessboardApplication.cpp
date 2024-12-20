@@ -28,7 +28,7 @@ std::string ConsoleChessboardApplication::prettifiedBoard() const
         {
             builder << boardRaw[i * chess::Board::BOARD_SIZE + j];
 
-            if (i != (chess::Board::BOARD_SIZE - 1))
+            if (j != (chess::Board::BOARD_SIZE - 1))
             {
                 builder << ' ';
             }
