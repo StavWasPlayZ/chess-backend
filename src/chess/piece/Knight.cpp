@@ -28,7 +28,7 @@ MoveResult chess::Knight::validateMove(const Point &destination) const
 
 char chess::Knight::marker() const
 {
-    return asPlayerMarker('q');
+    return asPlayerMarker('n');
 }
 
 int chess::Knight::value() const
