@@ -1,4 +1,5 @@
 #include "King.h"
+#include <limits.h>
 
 using namespace chess;
 
@@ -30,5 +31,5 @@ char chess::King::marker() const
 
 int chess::King::value() const
 {
-    return 9;
+    return INT_MAX;
 }
