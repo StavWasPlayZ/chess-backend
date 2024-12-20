@@ -9,6 +9,8 @@ using namespace chess;
 #include "./piece/Queen.h"
 #include "./piece/King.h"
 
+#include <sstream>
+
 /**
  * Checks if the goal was reached from either the
  * beggining or end of an array.
@@ -153,7 +155,26 @@ int chess::Board::getPlayerTurn() const
     return this->_playerTurn;
 }
 
-void chess::Board::_setPieceAt(const Point& pos, Piece& piece)
+std::string chess::Board::asPiecesString() const
+{
+    std::ostringstream builder;
+
+    for (size_t i = 0; i < BOARD_SIZE; i++)
+    {
+        for (size_t j = 0; j < BOARD_SIZE; j++)
+        {
+            const Piece* const piece = getPieces()[i][j];
+            builder << (piece == nullptr)
+                ? '#'
+                : piece->marker()
+            ;
+        }
+    }
+
+    return builder.str();
+}
+
+void chess::Board::_setPieceAt(const Point &pos, Piece &piece)
 {
     this->_pieces[pos.y][pos.x] = &piece;
     piece.setPosition(pos);

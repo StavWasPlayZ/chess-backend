@@ -64,6 +64,12 @@ namespace chess
          */
         int getPlayerTurn() const;
 
+        /**
+         * Returns a string representing this board
+         * as a string of all pieces' markers (Piece::marker).
+         */
+        std::string asPiecesString() const;
+
     private:
         Piece* _pieces[BOARD_SIZE][BOARD_SIZE];
 
