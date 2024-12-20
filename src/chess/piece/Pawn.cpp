@@ -26,9 +26,15 @@ MoveResult chess::Pawn::validateMove(const Point &destination) const
 
     if (abs(displacement.y) == 1)
     {
+        const Piece* const destPiece = getBoard()->getPieceAt(destination);
+
         if (displacement.x == 0)
         {
-            return MoveResult::LEGAL_MOVE;
+            // Must not have any piece at the destination.
+            if (destPiece == nullptr)
+                return MoveResult::LEGAL_MOVE;
+
+            return MoveResult::ILLEGAL_MOVE;
         }
         else
         {
@@ -37,8 +43,7 @@ MoveResult chess::Pawn::validateMove(const Point &destination) const
                 return MoveResult::ILLEGAL_MOVE;
 
             // Must be eating the *opposing* player
-            const Piece* const piece = getBoard()->getPieceAt(destination);
-            if ((piece == nullptr) || (piece->getPlayer() == getPlayer()))
+            if ((destPiece == nullptr) || (destPiece->getPlayer() == getPlayer()))
                 return MoveResult::ILLEGAL_MOVE;
 
             return MoveResult::LEGAL_MOVE;
@@ -48,6 +53,9 @@ MoveResult chess::Pawn::validateMove(const Point &destination) const
     if (abs(displacement.y) == 2)
     {
         if (wasMoved || (displacement.x != 0))
+            return MoveResult::ILLEGAL_MOVE;
+
+        if (isInterferenceInRoute(displacement.normalize(), 3))
             return MoveResult::ILLEGAL_MOVE;
 
         return MoveResult::LEGAL_MOVE;
