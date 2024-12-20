@@ -11,7 +11,7 @@ namespace chess
 
         /**
          * Whether this point exceeds
-         * the bounds of a chess board.
+         * the bounds of a chessboard.
          */
         bool isOutOfBounds() const;
 
