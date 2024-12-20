@@ -37,6 +37,14 @@ chess::Board::~Board()
     _freeBoard();
 }
 
+MoveResult chess::Board::movePiece(const std::string &moveStr)
+{
+    return movePiece(
+        Point::fromChessNotation(moveStr.substr(0, 2)),
+        Point::fromChessNotation(moveStr.substr(2, 4))
+    );
+}
+
 MoveResult chess::Board::movePiece(const Point &source, const Point &destination)
 {
     if (source.isOutOfBounds() || destination.isOutOfBounds())

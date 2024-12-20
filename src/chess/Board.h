@@ -7,6 +7,11 @@
 
 namespace chess
 {
+    class Player;
+    class Piece;
+    class Point;
+    enum class MoveResult;
+
     class Board
     {
     public:

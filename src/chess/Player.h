@@ -2,9 +2,13 @@
 
 #include <vector>
 #include "./piece/Piece.h"
+#include "Board.h"
 
 namespace chess
 {
+    class Board;
+    class Piece;
+    
     class Player
     {
     public:

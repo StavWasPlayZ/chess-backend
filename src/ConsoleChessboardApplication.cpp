@@ -40,4 +40,5 @@ std::string ConsoleChessboardApplication::prettifiedBoard() const
         }
     }
     
+    return builder.str();
 }

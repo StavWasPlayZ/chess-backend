@@ -67,6 +67,7 @@ Point &chess::Point::operator=(const Point &other)
 {
     this->x = other.x;
     this->y = other.y;
+    return *this;
 }
 
 bool chess::Point::operator==(const Point &other) const
@@ -77,8 +78,8 @@ bool chess::Point::operator==(const Point &other) const
 std::string chess::Point::toChessNotation() const
 {
     const char str[] = {
-        'a' + (this->x),
-        '0' + (Board::BOARD_SIZE - this->y)
+        (char)('a' + (this->x)),
+        (char)('0' + (Board::BOARD_SIZE - this->y))
     };
     return std::string(str, 2);
 }
