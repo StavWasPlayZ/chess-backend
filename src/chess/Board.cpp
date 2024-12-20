@@ -172,10 +172,10 @@ std::string chess::Board::asPiecesString() const
         for (size_t j = 0; j < BOARD_SIZE; j++)
         {
             const Piece* const piece = getPieces()[i][j];
-            builder << (piece == nullptr)
+            builder << ((piece == nullptr)
                 ? '#'
                 : piece->marker()
-            ;
+            );
         }
     }
 
