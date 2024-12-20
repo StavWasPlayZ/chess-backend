@@ -54,17 +54,45 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
         return res;
     
     
-    const Piece* const overPiece = getPieceAt(destination);
+    Piece* const overPiece = getPieceAt(destination);
 
+    removePieceAt(source);
+    _setPieceAt(destination, *piece);
+
+    // Check for self-check
+    const Player* const checkPlayer = getCheckPlayer();
+    const Player& thisPlayer = piece->getPlayer();
+
+    if (thisPlayer.getOther() == *checkPlayer)
+    {
+        // Revert board
+        _setPieceAt(source, *piece);
+        _setPieceAt(destination, *overPiece);
+
+        //NOTE: Re-do check statuses if necessary
+
+        return MoveResult::SELF_CHECK;
+    }
+
+    // There was already a piece at the destination
     if (overPiece != nullptr)
     {
         getPlayingPlayer().devour(overPiece);
     }
 
-    piece->setPosition(destination);
-    this->_pieces[destination.y][destination.x] = piece;
-
     piece->onMoved(overPiece);
+
+    // Check check status (for result)
+    // Can only be this player (per last check)
+    if (checkPlayer != nullptr)
+    {
+        if (thisPlayer == *getCheckmatePlayer())
+            return MoveResult::CHECKMATE;
+
+        return MoveResult::CHECK;
+    }
+
+    return res;
 }
 
 bool chess::Board::removePieceAt(const Point &point)
@@ -83,6 +111,16 @@ bool chess::Board::removePiece(const Piece &piece)
     
     removePieceAt(*(piece.getPosition()));
     return true;
+}
+
+Player *chess::Board::getCheckPlayer() const
+{
+    return nullptr;
+}
+
+Player *chess::Board::getCheckmatePlayer() const
+{
+    return nullptr;
 }
 
 Piece *chess::Board::getPieceAt(const Point &point) const
@@ -108,6 +146,12 @@ Player &chess::Board::getPlayingPlayer()
 int chess::Board::getPlayerTurn() const
 {
     return this->_playerTurn;
+}
+
+void chess::Board::_setPieceAt(const Point& pos, Piece& piece)
+{
+    this->_pieces[pos.y][pos.x] = &piece;
+    piece.setPosition(pos);
 }
 
 void chess::Board::_populateBoard()
@@ -152,7 +196,7 @@ void chess::Board::_populateBoard()
             }
             else if (j == 4)
             {
-                piece = new Queen(*this, Point(j, i), player);
+                piece = new King(*this, Point(j, i), player);
             }
             // Should be no more.
 
