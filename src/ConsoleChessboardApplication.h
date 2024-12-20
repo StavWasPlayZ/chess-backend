@@ -1,3 +1,5 @@
+#pragma once
+
 #include "./chess/Board.h"
 
 class ConsoleChessboardApplication
