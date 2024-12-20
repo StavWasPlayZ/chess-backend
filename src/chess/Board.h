@@ -2,6 +2,7 @@
 
 #include "./piece/Piece.h"
 #include "Player.h"
+#include <array>
 #include <string>
 
 namespace chess
@@ -48,6 +49,8 @@ namespace chess
          * Null for none.
          */
         Player* getCheckmatePlayer() const;
+
+        Piece* const (&getPieces() const)[BOARD_SIZE][BOARD_SIZE];
 
 
         Piece* getPieceAt(const Point& point) const;

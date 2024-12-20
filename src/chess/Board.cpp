@@ -123,6 +123,11 @@ Player *chess::Board::getCheckmatePlayer() const
     return nullptr;
 }
 
+Piece* const (&chess::Board::getPieces() const)[Board::BOARD_SIZE][Board::BOARD_SIZE]
+{
+    return this->_pieces;
+}
+
 Piece *chess::Board::getPieceAt(const Point &point) const
 {
     return this->_pieces[point.y][point.x];
