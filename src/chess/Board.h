@@ -19,8 +19,8 @@ namespace chess
         Board();
         ~Board();
 
-        MoveResult movePiece(const std::string& moveStr);
-        MoveResult movePiece(const Point& source, const Point& destination);
+        MoveResult movePiece(const std::string& moveStr, const Player& initiator);
+        MoveResult movePiece(const Point& source, const Point& destination, const Player& initiator);
 
         /**
          * Removes--but not frees--the piece at the given point.

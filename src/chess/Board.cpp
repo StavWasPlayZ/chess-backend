@@ -37,16 +37,28 @@ chess::Board::~Board()
     _freeBoard();
 }
 
-MoveResult chess::Board::movePiece(const std::string &moveStr)
+MoveResult chess::Board::movePiece(const std::string &moveStr, const Player& initiator)
 {
     return movePiece(
         Point::fromChessNotation(moveStr.substr(0, 2)),
-        Point::fromChessNotation(moveStr.substr(2, 4))
+        Point::fromChessNotation(moveStr.substr(2, 4)),
+        initiator
     );
 }
 
-MoveResult chess::Board::movePiece(const Point &source, const Point &destination)
+MoveResult chess::Board::movePiece(const Point &source, const Point &destination, const Player& initiator)
 {
+    if (initiator != getPlayingPlayer())
+    {
+        //NOTE: A much better approach would be to just omit this field altogether.
+        // Both the frontend and backend should already be in sync on this matter.
+        //
+        // This would, however, be more appropriate for server-client relations,
+        // if that was the aim. I guess.
+        // Though the identifier would be the socket instance itself, or some session ID,
+        // and not some random integer passed on as part of a message.
+        return MoveResult::ILLEGAL_MOVE;
+    }
     if (source.isOutOfBounds() || destination.isOutOfBounds())
     {
         return MoveResult::OUT_OF_BOUNDS;

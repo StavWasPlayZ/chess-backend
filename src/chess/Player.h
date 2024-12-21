@@ -31,6 +31,7 @@ namespace chess
         int getPointsTotal() const;
 
         bool operator==(const Player& other) const;
+        bool operator!=(const Player& other) const;
 
         /**
          * Gets the other player on the board

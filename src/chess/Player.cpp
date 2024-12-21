@@ -57,6 +57,11 @@ bool chess::Player::operator==(const Player &other) const
     return this->number == other.number;
 }
 
+bool chess::Player::operator!=(const Player &other) const
+{
+    return this->number != other.number;
+}
+
 Player &chess::Player::getOther() const
 {
     return getBoard().getPlayer(1 - this->number);
