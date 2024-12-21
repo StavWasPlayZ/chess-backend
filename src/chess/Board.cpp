@@ -232,7 +232,10 @@ void chess::Board::_populateBoard()
             {
                 piece = new Queen(*this, Point(j, i), player);
             }
-            // Should be no more.
+            else
+            {
+                throw std::logic_error("Invalid piece type");
+            }
 
             this->_pieces[i][j] = piece;
         }
