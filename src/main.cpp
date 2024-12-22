@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "ConsoleChessboardApplication.h"
-// #include "./comm/NamedPipeLinuxImpl.h"
+// #include "NamedPipeLinuxImpl.h"
 
 static void clearConsole();
 
