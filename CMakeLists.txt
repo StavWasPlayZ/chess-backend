@@ -7,7 +7,7 @@ add_executable(chess_backend ${SOURCES})
 
 # Only include Linux commincation on non-Windows devices.
 # (Technically this works on all Unix devices, so 'NOT WIN32'.)
-if (NOT WIN32)
+if(NOT WIN32)
     set(LINUX_COMM_PATH "${CMAKE_SOURCE_DIR}/comm/linux")
 
     target_include_directories(chess_backend PRIVATE ${LINUX_COMM_PATH}/)
