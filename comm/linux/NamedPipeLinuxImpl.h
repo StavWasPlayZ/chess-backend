@@ -9,6 +9,7 @@ class NamedPipeLinuxImpl : public INamedPipe
 {
 public:
     NamedPipeLinuxImpl(const std::string& name = CHESS_PIPE_NAME);
+    ~NamedPipeLinuxImpl();
 
     virtual void sendMsg(const std::string& msg) override;
     virtual std::string waitForMsg() override;
