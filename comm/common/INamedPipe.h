@@ -11,8 +11,8 @@ class INamedPipe
 public:
     INamedPipe(const std::string& name);
 
-    virtual void sendMsg(const std::string& msg) const = 0;
-    virtual std::string waitForMsg() const = 0;
+    virtual void sendMsg(const std::string& msg) = 0;
+    virtual std::string waitForMsg() = 0;
 
     const char* getName() const;
 

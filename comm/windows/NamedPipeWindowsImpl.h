@@ -13,8 +13,8 @@ public:
     NamedPipeWindowsImpl(const std::string& name = CHESS_PIPE_NAME);
     ~NamedPipeWindowsImpl();
 
-    void sendMsg(const std::string& msg) const override;
-    std::string waitForMsg() const override;
+    void sendMsg(const std::string& msg) override;
+    std::string waitForMsg() override;
 
     virtual void open() override;
     virtual void close() override;

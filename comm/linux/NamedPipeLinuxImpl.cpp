@@ -12,21 +12,21 @@ NamedPipeLinuxImpl::~NamedPipeLinuxImpl()
     close();
 }
 
-void NamedPipeLinuxImpl::sendMsg(const std::string &msg) const
+void NamedPipeLinuxImpl::sendMsg(const std::string &msg)
 {
     int pFifo = openPipe(O_WRONLY);
     
     write(pFifo, msg.c_str(), msg.length());
-    close(pFifo);
+    ::close(pFifo);
 }
 
-std::string NamedPipeLinuxImpl::waitForMsg() const
+std::string NamedPipeLinuxImpl::waitForMsg()
 {
     int pFifo = openPipe(O_RDONLY);
 
     char buffer[MAX_MSG_SIZE];
     ssize_t bytesRead = read(pFifo, buffer, sizeof(char) * (MAX_MSG_SIZE - 1));
-    close(pFifo);
+    ::close(pFifo);
 
     buffer[bytesRead] = 0;
     return std::string(buffer);
@@ -44,7 +44,7 @@ void NamedPipeLinuxImpl::close()
 
 int NamedPipeLinuxImpl::openPipe(const int flag) const
 {
-    int pFifo = open(getName(), flag);
+    int pFifo = ::open(getName(), flag);
     if (pFifo == -1)
         throw pipeNotOpenedException(strerror(errno));
 

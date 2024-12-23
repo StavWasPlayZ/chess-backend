@@ -10,8 +10,8 @@ class NamedPipeLinuxImpl : public INamedPipe
 public:
     NamedPipeLinuxImpl(const std::string& name = CHESS_PIPE_NAME);
 
-    virtual void sendMsg(const std::string& msg) const override;
-    virtual std::string waitForMsg() const override;
+    virtual void sendMsg(const std::string& msg) override;
+    virtual std::string waitForMsg() override;
 
     virtual void open() override;
     virtual void close() override;

@@ -10,7 +10,7 @@ NamedPipeWindowsImpl::~NamedPipeWindowsImpl()
 }
 
 
-void NamedPipeWindowsImpl::sendMsg(const std::string& msg) const
+void NamedPipeWindowsImpl::sendMsg(const std::string& msg)
 {
 	waitForConnection();
 
@@ -20,7 +20,7 @@ void NamedPipeWindowsImpl::sendMsg(const std::string& msg) const
 	DisconnectNamedPipe(*this->_pipe);
 }
 
-std::string NamedPipeWindowsImpl::waitForMsg() const
+std::string NamedPipeWindowsImpl::waitForMsg()
 {
 	waitForConnection();
 
