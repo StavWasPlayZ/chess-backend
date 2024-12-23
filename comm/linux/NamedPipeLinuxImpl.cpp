@@ -2,21 +2,14 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <stdexcept>
-#include <iostream>
 #include <unistd.h>
 #include <fcntl.h>
 #include <cstring>
 
-NamedPipeLinuxImpl::NamedPipeLinuxImpl(const std::string &name) : _name(name.c_str())
-{
-    if (mkfifo(getName(), 0666) == -1)
-        throw std::ios_base::failure("Failed to create named pipe");
-}
-
+NamedPipeLinuxImpl::NamedPipeLinuxImpl(const std::string &name) : INamedPipe(name.c_str()) {}
 NamedPipeLinuxImpl::~NamedPipeLinuxImpl()
 {
-    unlink(getName());
+    close();
 }
 
 void NamedPipeLinuxImpl::sendMsg(const std::string &msg) const
@@ -39,16 +32,21 @@ std::string NamedPipeLinuxImpl::waitForMsg() const
     return std::string(buffer);
 }
 
-const char *NamedPipeLinuxImpl::getName() const
+void NamedPipeLinuxImpl::open()
 {
-    return this->_name;
+    if (mkfifo(getName(), 0666) == -1)
+        throw pipeNotCreatedException();
+}
+void NamedPipeLinuxImpl::close()
+{
+    unlink(getName());
 }
 
 int NamedPipeLinuxImpl::openPipe(const int flag) const
 {
     int pFifo = open(getName(), flag);
     if (pFifo == -1)
-        throw std::ios_base::failure("Failed to open named pipe " + std::string(getName()) + ": " + strerror(errno));
+        throw pipeNotOpenedException(strerror(errno));
 
     return pFifo;
 }

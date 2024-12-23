@@ -1,19 +1,20 @@
 #pragma once
 #include <string>
 
-#define CHESS_PIPE_NAME "/tmp/cstavchess"
-constexpr int MAX_MSG_SIZE = 5;
+#include "../common/INamedPipe.h"
 
-class NamedPipeLinuxImpl
+constexpr const char* CHESS_PIPE_NAME = "/tmp/cstavchess";
+
+class NamedPipeLinuxImpl : public INamedPipe
 {
 public:
     NamedPipeLinuxImpl(const std::string& name = CHESS_PIPE_NAME);
-    ~NamedPipeLinuxImpl();
 
-    void sendMsg(const std::string& msg) const;
-    std::string waitForMsg() const;
+    virtual void sendMsg(const std::string& msg) const override;
+    virtual std::string waitForMsg() const override;
 
-    const char* getName() const;
+    virtual void open() override;
+    virtual void close() override;
 
 protected:
     /**
@@ -22,7 +23,4 @@ protected:
      * Throws if something wrong occured.
      */
     int openPipe(const int flag) const;
-
-private:
-    const char* const _name;
 };
