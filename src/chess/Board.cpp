@@ -238,11 +238,11 @@ void chess::Board::_populateBoard()
             }
             else if (j == 3)
             {
-                piece = new King(*this, Point(j, i), player);
+                piece = new Queen(*this, Point(j, i), player);
             }
             else if (j == 4)
             {
-                piece = new Queen(*this, Point(j, i), player);
+                piece = new King(*this, Point(j, i), player);
             }
             else
             {
