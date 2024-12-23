@@ -9,7 +9,7 @@ namespace chess
 {
     class Player;
     class Piece;
-    class Point;
+    struct Point;
     enum class MoveResult;
 
     class Board

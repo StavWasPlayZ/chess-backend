@@ -7,6 +7,8 @@
 
 namespace chess
 {
+    class Board;
+
     class Piece
     {
     public:
