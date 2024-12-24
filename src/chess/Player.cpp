@@ -32,7 +32,6 @@ Board &chess::Player::getBoard() const
 void chess::Player::devour(const Piece *const piece)
 {
     this->_devouredPieces.push_back(piece);
-    _board.removePiece(*piece);
 }
 
 const std::vector<const Piece *> chess::Player::getDevouredPieces() const
