@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "ConsoleChessboardApplication.h"
-// #include "NamedPipeLinuxImpl.h"
+#include "CommonNamedPipe.h"
 
 static void clearConsole();
 
@@ -14,10 +14,6 @@ int main(int argc, char const *argv[])
     //TODO: re-draw every time there is a change.
     // Also call clear.
     consoleApp.draw();
-
-    // NamedPipeLinuxImpl pipe;
-    // pipe.sendMsg("hi");
-    // std::cout << "got: " << pipe.waitForMsg() << std::endl;
 
     return 0;
 }
