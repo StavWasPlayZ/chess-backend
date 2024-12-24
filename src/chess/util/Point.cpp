@@ -20,7 +20,7 @@ Point chess::Point::fromChessNotation(const std::string &chessNotation)
     ))
         throw std::invalid_argument("Invalid chess notation: String must be a character followed by a number.");
 
-    return Point(chessNotation[0] - 'a', chessNotation[1] - '0');
+    return Point(chessNotation[0] - 'a', Board::BOARD_SIZE - (int)(chessNotation[1] - '0'));
 }
 
 bool chess::Point::isOutOfBounds() const

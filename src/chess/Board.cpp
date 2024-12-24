@@ -85,7 +85,7 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
     const Player* const checkPlayer = getCheckPlayer();
     const Player& thisPlayer = piece->getPlayer();
 
-    if (thisPlayer.getOther() == *checkPlayer)
+    if ((checkPlayer != nullptr) && (thisPlayer.getOther() == *checkPlayer))
     {
         // Revert board
         _setPieceAt(source, *piece);
@@ -109,11 +109,16 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
     if (checkPlayer != nullptr)
     {
         if (thisPlayer == *getCheckmatePlayer())
-            return MoveResult::CHECKMATE;
-
-        return MoveResult::CHECK;
+        {
+            res = MoveResult::CHECKMATE;
+        }
+        else
+        {
+            res = MoveResult::CHECK;
+        }
     }
 
+    this->_playerTurn = 1 - this->_playerTurn;
     return res;
 }
 
