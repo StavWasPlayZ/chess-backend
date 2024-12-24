@@ -6,7 +6,7 @@
 #include <fcntl.h>
 #include <cstring>
 
-NamedPipeLinuxImpl::NamedPipeLinuxImpl(const std::string &name) : INamedPipe(name.c_str()) {}
+NamedPipeLinuxImpl::NamedPipeLinuxImpl(const std::string &name) : INamedPipe(name) {}
 NamedPipeLinuxImpl::~NamedPipeLinuxImpl()
 {
     close();
@@ -34,7 +34,9 @@ std::string NamedPipeLinuxImpl::waitForMsg()
 
 void NamedPipeLinuxImpl::open()
 {
-    if (mkfifo(getName(), 0666) == -1)
+    const int res = mkfifo(getName(), 0666);
+
+    if ((res == -1) && (errno != EEXIST))
         throw pipeNotCreatedException();
 }
 void NamedPipeLinuxImpl::close()

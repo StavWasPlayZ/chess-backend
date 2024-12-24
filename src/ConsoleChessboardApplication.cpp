@@ -9,7 +9,11 @@ ConsoleChessboardApplication::ConsoleChessboardApplication(chess::Board &board) 
 
 void ConsoleChessboardApplication::draw() const
 {
-    std::cout << prettifiedBoard() << std::endl;
+    std::cout
+        << prettifiedBoard() << std::endl
+        << std::endl
+        << "Player 1 points: " << getBoard().getPlayer(0).getPointsTotal() << std::endl
+        << "Player 2 points: " << getBoard().getPlayer(1).getPointsTotal() << std::endl;
 }
 
 chess::Board &ConsoleChessboardApplication::getBoard() const
