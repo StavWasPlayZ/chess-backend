@@ -18,7 +18,8 @@ void NamedPipeWindowsImpl::sendMsg(const std::string& msg)
 	WriteFile(
 		*this->_pipe,
 		msgNewlineTerminated.c_str(),
-		msgNewlineTerminated.length() + 1,
+		// The \n is already a terminator.
+		msgNewlineTerminated.length(),
 		&written,
 		nullptr
 	);
