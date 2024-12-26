@@ -21,7 +21,7 @@ std::string NamedPipeWindowsImpl::waitForMsg()
 	char buffer[MAX_MSG_SIZE];
 
 	DWORD read;
-	ReadFile(*this->_pipe, buffer, MAX_MSG_SIZE, &read - 1, nullptr);
+	ReadFile(*this->_pipe, buffer, MAX_MSG_SIZE - 1, &read, nullptr);
 	buffer[read] = 0;
 
 	return std::string(buffer);
