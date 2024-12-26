@@ -12,23 +12,18 @@ NamedPipeWindowsImpl::~NamedPipeWindowsImpl()
 
 void NamedPipeWindowsImpl::sendMsg(const std::string& msg)
 {
-	waitForConnection();
-
 	DWORD written;
 	WriteFile(*this->_pipe, msg.c_str(), msg.length() + 1, &written, nullptr);
-
-	DisconnectNamedPipe(*this->_pipe);
 }
 
 std::string NamedPipeWindowsImpl::waitForMsg()
 {
-	waitForConnection();
-
 	char buffer[MAX_MSG_SIZE];
-	DWORD read;
-	ReadFile(*this->_pipe, buffer, MAX_MSG_SIZE, &read, nullptr);
 
-	DisconnectNamedPipe(*this->_pipe);
+	DWORD read;
+	ReadFile(*this->_pipe, buffer, MAX_MSG_SIZE, &read - 1, nullptr);
+	buffer[read] = 0;
+
 	return std::string(buffer);
 }
 
@@ -53,6 +48,8 @@ void NamedPipeWindowsImpl::open()
 		delete _pipe;
 		throw pipeNotOpenedException("" + GetLastError());
 	}
+
+	waitForConnection();
 }
 
 void NamedPipeWindowsImpl::close()
@@ -60,6 +57,7 @@ void NamedPipeWindowsImpl::close()
 	if (_pipe == nullptr)
 		return;
 
+	DisconnectNamedPipe(*this->_pipe);
 	CloseHandle(*this->_pipe);
 	delete _pipe;
 	this->_pipe = nullptr;

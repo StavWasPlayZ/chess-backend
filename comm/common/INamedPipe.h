@@ -24,5 +24,5 @@ protected:
     std::ios_base::failure pipeNotOpenedException(const std::string& details) const;
 
 private:
-    const char* const _name;
+    const std::string _name;
 };

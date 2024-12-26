@@ -23,9 +23,12 @@ int main(int argc, char const *argv[])
 static void startBackend()
 {
     NAMED_PIPE pipe;
+    std::cout << "Opening backend pipe..." << std::endl;
+    // On Windows, this will block until a new connection arrives.
+    // On Linux, it will just pass (mkfifo) and wait on waitForMessage.
     pipe.open();
 
-    std::cout << "Backend connection opened. Waiting for frontend..." << std::endl;
+    std::cout << "Backend connection opened. Waiting for frontend handshake..." << std::endl;
     const std::string msg = pipe.waitForMsg();
 
     if (msg != "rdy")

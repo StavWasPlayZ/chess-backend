@@ -1,6 +1,6 @@
 #include "INamedPipe.h"
 
-INamedPipe::INamedPipe(const std::string& name) : _name(name.c_str())
+INamedPipe::INamedPipe(const std::string& name) : _name(name)
 {
 	// Make the callee open by themselves.
 	//open();
@@ -8,7 +8,7 @@ INamedPipe::INamedPipe(const std::string& name) : _name(name.c_str())
 
 const char* INamedPipe::getName() const
 {
-	return this->_name;
+	return this->_name.c_str();
 }
 
 std::ios_base::failure INamedPipe::pipeNotCreatedException() const
