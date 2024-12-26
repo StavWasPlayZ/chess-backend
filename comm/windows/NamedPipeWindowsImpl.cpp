@@ -12,8 +12,16 @@ NamedPipeWindowsImpl::~NamedPipeWindowsImpl()
 
 void NamedPipeWindowsImpl::sendMsg(const std::string& msg)
 {
+	std::string msgNewlineTerminated = msg + '\n';
+
 	DWORD written;
-	WriteFile(*this->_pipe, msg.c_str(), msg.length() + 1, &written, nullptr);
+	WriteFile(
+		*this->_pipe,
+		msgNewlineTerminated.c_str(),
+		msgNewlineTerminated.length() + 1,
+		&written,
+		nullptr
+	);
 }
 
 std::string NamedPipeWindowsImpl::waitForMsg()
