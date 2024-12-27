@@ -347,6 +347,12 @@ void chess::Board::_populateBoard()
             }
 
             this->_pieces[i][j] = Piece::fromType(pieceType, *this, Point(j, i), player);
+
+            // Update the King reference to the player
+            if (pieceType == PieceType::KING)
+            {
+                player.setKing((King&) *this->_pieces[i][j]);
+            }
         }
     }
 }

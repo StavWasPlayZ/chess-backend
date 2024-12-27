@@ -3,7 +3,9 @@
 using namespace chess;
 
 chess::Player::Player(Board& board, const int number) :
-    _mayPerformCastling(true), _board(board), number(number)
+    _mayPerformCastling(true),
+    _board(board),
+    number(number)
 {}
 
 chess::Player::~Player()
@@ -27,6 +29,16 @@ void chess::Player::disallowCastling()
 Board &chess::Player::getBoard() const
 {
     return this->_board;
+}
+
+King &chess::Player::getKing() const
+{
+    return *this->_king;
+}
+
+void chess::Player::setKing(King &king)
+{
+    this->_king = &king;
 }
 
 void chess::Player::devour(const Piece *const piece)

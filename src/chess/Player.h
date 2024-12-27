@@ -8,6 +8,7 @@ namespace chess
 {
     class Board;
     class Piece;
+    class King;
     
     class Player
     {
@@ -15,6 +16,7 @@ namespace chess
         Player(Board& board, const int number);
         ~Player();
 
+        //TODO change to enum
         /**
          * 0 = white, 1 = black.
          */
@@ -24,6 +26,10 @@ namespace chess
         void disallowCastling();
 
         Board& getBoard() const;
+
+        King& getKing() const;
+        void setKing(King& king);
+
 
         void devour(const Piece* const piece);
         const std::vector<const Piece*> getDevouredPieces() const;
@@ -40,6 +46,7 @@ namespace chess
 
     private:
         Board& _board;
+        King* _king;
 
         std::vector<const Piece*> _devouredPieces;
         bool _mayPerformCastling;
