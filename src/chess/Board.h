@@ -113,6 +113,10 @@ namespace chess
          * and the player to check against.
          */
         void _acknowledgeCheckResult(MoveResult& currRes, const Player& player) const;
+        /**
+         * Same as the original overload, but provided the checkPlayer was already determined.
+         */
+        void _acknowledgeCheckResult(MoveResult& currRes, const Player& player, const Player* const checkPlayer) const;
 
 
         void _setPieceAt(const Point& pos, Piece& piece);

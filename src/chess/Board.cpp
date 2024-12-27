@@ -124,7 +124,7 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
 
     piece->onMoved(overPiece);
 
-    _acknowledgeCheckResult(res, initiator);
+    _acknowledgeCheckResult(res, initiator, checkPlayer);
 
     if (!isInSwitchPawnState())
     {
@@ -169,7 +169,7 @@ MoveResult chess::Board::switchPawnTo(const PieceType pieceType, Player &initiat
 
     MoveResult res = MoveResult::LEGAL_MOVE;
 
-    _acknowledgeCheckResult(res, initiator);
+    _acknowledgeCheckResult(res, initiator, checkPlayer);
 
     delete this->_switchingPawn;
     this->_switchingPawn = nullptr;
@@ -270,7 +270,11 @@ bool chess::Board::_isValidPawnSwitch(const PieceType pieceType) const
 
 void chess::Board::_acknowledgeCheckResult(MoveResult &currRes, const Player &player) const
 {
-    const Player* checkPlayer = getCheckPlayer();
+    return _acknowledgeCheckResult(currRes, player, getCheckPlayer());
+}
+
+void chess::Board::_acknowledgeCheckResult(MoveResult &currRes, const Player &player, const Player *const checkPlayer) const
+{
     if (checkPlayer == nullptr)
         return;
 
