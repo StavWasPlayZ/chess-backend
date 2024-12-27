@@ -7,6 +7,8 @@
 
 static void startBackend();
 static void gameLifecycle(NAMED_PIPE& pipe);
+static bool processMoveMsg(const std::string& msg, chess::Board chessboard, NAMED_PIPE& pipe);
+static bool processPawnChangingMsg(const std::string& msg, chess::Board chessboard, NAMED_PIPE& pipe);
 // static void clearConsole();
 
 int main(int argc, char const *argv[])
