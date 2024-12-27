@@ -33,3 +33,8 @@ int chess::King::value() const
 {
     return INT_MAX;
 }
+
+PieceType chess::King::getType() const
+{
+    return PieceType::KING;
+}

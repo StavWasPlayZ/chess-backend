@@ -9,8 +9,11 @@ namespace chess
 {
     class Player;
     class Piece;
+    class Pawn;
+
     struct Point;
     enum class MoveResult;
+    enum class PieceType;
 
     class Board
     {
@@ -21,6 +24,18 @@ namespace chess
 
         MoveResult movePiece(const std::string& moveStr, const Player& initiator);
         MoveResult movePiece(const Point& source, const Point& destination, const Player& initiator);
+
+        /**
+         * Returns: Whether the board is awaiting for a pawn
+         * to be switched.
+         */
+        bool isInSwitchPawnState() const;
+        /**
+         * Switches the previously unmovable pawn to
+         * a different piece type.
+         */
+        MoveResult switchPawnTo(const PieceType pieceType, Player& initiator);
+        
 
         /**
          * Removes--but not frees--the piece at the given point.
@@ -76,7 +91,29 @@ namespace chess
         std::string asPiecesString() const;
 
     private:
+        static constexpr int _PAWN_SWITCHABLES_SIZE = 4;
+        static const PieceType _PAWN_SWITCHABLES[_PAWN_SWITCHABLES_SIZE];
+
         Piece* _pieces[BOARD_SIZE][BOARD_SIZE];
+        /**
+         * A pawn that is waiting to be replaced by another chess piece.
+         * Null for none.
+         */
+        Pawn* _switchingPawn;
+
+        bool _isValidPawnSwitch(const PieceType pieceType) const;
+
+
+        /**
+         * Checks if the current player is in possession
+         * of a check/checkmate.
+         * If so, replaces `currRes` with
+         * either `MoveResult::CHECK` or `MoveResult::CHECKMATE` alike.
+         * Params: The currect result to be switched (conditionally)
+         * and the player to check against.
+         */
+        void _acknowledgeCheckResult(MoveResult& currRes, const Player& player) const;
+
 
         void _setPieceAt(const Point& pos, Piece& piece);
 

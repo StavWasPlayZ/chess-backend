@@ -30,3 +30,8 @@ int chess::Queen::value() const
 {
     return 9;
 }
+
+PieceType chess::Queen::getType() const
+{
+    return PieceType::QUEEN;
+}

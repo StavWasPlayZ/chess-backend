@@ -26,3 +26,8 @@ int chess::Rook::value() const
 {
     return 5;
 }
+
+PieceType chess::Rook::getType() const
+{
+    return PieceType::ROOK;
+}

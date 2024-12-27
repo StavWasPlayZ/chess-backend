@@ -74,6 +74,11 @@ int chess::Pawn::value() const
     return 1;
 }
 
+PieceType chess::Pawn::getType() const
+{
+    return PieceType::PAWN;
+}
+
 void chess::Pawn::onMoved(const Piece *const devouredPiece)
 {
     this->wasMoved = true;

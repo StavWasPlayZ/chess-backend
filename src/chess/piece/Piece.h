@@ -8,10 +8,13 @@
 namespace chess
 {
     class Board;
+    enum class PieceType;
 
     class Piece
     {
     public:
+        static Piece* fromType(const PieceType type, Board& board, const Point& position, Player& player);
+
         Piece(Board& board, const Point& position, Player& player);
         virtual ~Piece();
 
@@ -21,6 +24,7 @@ namespace chess
          * The value of this piece in points
          */
         virtual int value() const = 0;
+        virtual PieceType getType() const = 0;
 
         void setPosition(const Point& point);
 
@@ -55,5 +59,15 @@ namespace chess
          * Position may be null after being taken off-board.
          */
         Point* _pos;
+    };
+
+    enum class PieceType
+    {
+        BISHOP,
+        KING,
+        QUEEN,
+        ROOK,
+        KNIGHT,
+        PAWN
     };
 }

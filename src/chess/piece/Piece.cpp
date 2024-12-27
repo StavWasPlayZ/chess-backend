@@ -1,9 +1,32 @@
 #include "Piece.h"
 
+#include <stdexcept>
+
+#include "./Pawn.h"
+#include "./Rook.h"
+#include "./Knight.h"
+#include "./Bishop.h"
+#include "./Queen.h"
+#include "./King.h"
+
 using namespace chess;
 
-chess::Piece::Piece(Board &board, const Point &position, Player& player) :
-    _board(&board), _pos(new Point(position)), _player(player)
+Piece* chess::Piece::fromType(const PieceType type, Board &board, const Point &position, Player &player)
+{
+    switch (type)
+    {
+        case PieceType::PAWN: return new Pawn(board, position, player);
+        case PieceType::ROOK: return new Rook(board, position, player);
+        case PieceType::KNIGHT: return new Knight(board, position, player);
+        case PieceType::KING: return new King(board, position, player);
+        case PieceType::BISHOP: return new Bishop(board, position, player);
+        case PieceType::QUEEN: return new Queen(board, position, player);
+    }
+
+    throw std::invalid_argument("Invalid chess piece type");
+}
+
+chess::Piece::Piece(Board &board, const Point &position, Player &player) : _board(&board), _pos(new Point(position)), _player(player)
 {}
 
 chess::Piece::~Piece()

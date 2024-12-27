@@ -35,3 +35,8 @@ int chess::Knight::value() const
 {
     return 9;
 }
+
+PieceType chess::Knight::getType() const
+{
+    return PieceType::KNIGHT;
+}

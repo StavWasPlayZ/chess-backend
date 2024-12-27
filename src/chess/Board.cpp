@@ -3,13 +3,18 @@
 using namespace chess;
 
 #include "./piece/Pawn.h"
-#include "./piece/Rook.h"
-#include "./piece/Knight.h"
-#include "./piece/Bishop.h"
-#include "./piece/Queen.h"
-#include "./piece/King.h"
 
 #include <sstream>
+
+
+const PieceType Board::_PAWN_SWITCHABLES[Board::_PAWN_SWITCHABLES_SIZE] =
+{
+    PieceType::QUEEN,
+    PieceType::ROOK,
+    PieceType::BISHOP,
+    PieceType::KNIGHT
+};
+
 
 /**
  * Checks if the goal was reached from either the
@@ -48,6 +53,11 @@ MoveResult chess::Board::movePiece(const std::string &moveStr, const Player& ini
 
 MoveResult chess::Board::movePiece(const Point &source, const Point &destination, const Player& initiator)
 {
+    // There shouldn't be any movement;
+    // We're waiting for a pawn switch.
+    if (isInSwitchPawnState())
+        return MoveResult::ILLEGAL_MOVE;
+
     if (initiator != getPlayingPlayer())
     {
         //NOTE: A much better approach would be to just omit this field altogether.
@@ -59,16 +69,13 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
         // and not some random integer passed on as part of a message.
         return MoveResult::ILLEGAL_MOVE;
     }
+    
     if (source.isOutOfBounds() || destination.isOutOfBounds())
-    {
         return MoveResult::OUT_OF_BOUNDS;
-    }
 
     Piece* const piece = getPieceAt(source);
     if (piece == nullptr)
-    {
         return MoveResult::NO_TOOL;
-    }
 
     MoveResult res = piece->validateMove(destination);
 
@@ -83,15 +90,11 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
 
     // Check for self-check
     const Player* const checkPlayer = getCheckPlayer();
-    const Player& thisPlayer = piece->getPlayer();
-
-    if ((checkPlayer != nullptr) && (thisPlayer.getOther() == *checkPlayer))
+    if ((checkPlayer != nullptr) && (initiator != *checkPlayer))
     {
         // Revert board
         _setPieceAt(source, *piece);
         _setPieceAt(destination, *overPiece);
-
-        //NOTE: Re-do check statuses if necessary
 
         return MoveResult::SELF_CHECK;
     }
@@ -102,23 +105,69 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
         getPlayingPlayer().devour(overPiece);
     }
 
-    piece->onMoved(overPiece);
-
-    // Check check status (for result)
-    // Can only be this player (per last check)
-    if (checkPlayer != nullptr)
+    // If it's a pawn, and it reached the end - it may be replaced.
+    if (piece->getType() == PieceType::PAWN)
     {
-        if (thisPlayer == *getCheckmatePlayer())
+        int dest = (initiator.number == 0) ? 0 : (BOARD_SIZE - 1);
+
+        if (piece->getPosition()->y == dest)
         {
-            res = MoveResult::CHECKMATE;
-        }
-        else
-        {
-            res = MoveResult::CHECK;
+            this->_switchingPawn = (Pawn*) piece;
         }
     }
 
-    this->_playerTurn = 1 - this->_playerTurn;
+    piece->onMoved(overPiece);
+
+    _acknowledgeCheckResult(res, initiator);
+
+    if (!isInSwitchPawnState())
+    {
+        this->_playerTurn = 1 - this->_playerTurn;
+    }
+    return res;
+}
+
+bool chess::Board::isInSwitchPawnState() const
+{
+    return this->_switchingPawn != nullptr;
+}
+
+MoveResult chess::Board::switchPawnTo(const PieceType pieceType, Player &initiator)
+{
+    if (!isInSwitchPawnState())
+        return MoveResult::ILLEGAL_MOVE;
+
+    if (initiator != getPlayingPlayer())
+        return MoveResult::ILLEGAL_MOVE;
+
+    if (!_isValidPawnSwitch(pieceType))
+        return MoveResult::ILLEGAL_MOVE;
+
+    const Point& pos = *this->_switchingPawn->getPosition();
+
+    Piece* newPiece = Piece::fromType(pieceType, *this, pos, initiator);
+    _setPieceAt(pos, *newPiece);
+
+
+    // Check for self-check
+    const Player* const checkPlayer = getCheckPlayer();
+    if ((checkPlayer != nullptr) && (initiator != *checkPlayer))
+    {
+        // Revert piece
+        _setPieceAt(pos, *this->_switchingPawn);
+        delete newPiece;
+
+        return MoveResult::SELF_CHECK;
+    }
+
+
+    MoveResult res = MoveResult::LEGAL_MOVE;
+
+    _acknowledgeCheckResult(res, initiator);
+
+    delete this->_switchingPawn;
+    this->_switchingPawn = nullptr;
+
     return res;
 }
 
@@ -199,6 +248,34 @@ std::string chess::Board::asPiecesString() const
     return builder.str();
 }
 
+bool chess::Board::_isValidPawnSwitch(const PieceType pieceType) const
+{
+    for (size_t i = 0; i < _PAWN_SWITCHABLES_SIZE; i++)
+    {
+        if (_PAWN_SWITCHABLES[i] == pieceType)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void chess::Board::_acknowledgeCheckResult(MoveResult &currRes, const Player &player) const
+{
+    if (player != *getCheckPlayer())
+        return;
+    
+    if (player == *getCheckmatePlayer())
+    {
+        currRes = MoveResult::CHECKMATE;
+    }
+    else
+    {
+        currRes = MoveResult::CHECK;
+    }
+}
+
 void chess::Board::_setPieceAt(const Point &pos, Piece &piece)
 {
     this->_pieces[pos.y][pos.x] = &piece;
@@ -227,34 +304,34 @@ void chess::Board::_populateBoard()
                 continue;
             }
 
-            Piece* piece;
+            PieceType pieceType;
 
             if (mirrorCheck(j, 0))
             {
-                piece = new Rook(*this, Point(j, i), player);
+                pieceType = PieceType::ROOK;
             }
             else if (mirrorCheck(j, 1))
             {
-                piece = new Knight(*this, Point(j, i), player);
+                pieceType = PieceType::KNIGHT;
             }
             else if (mirrorCheck(j, 2))
             {
-                piece = new Bishop(*this, Point(j, i), player);
+                pieceType = PieceType::BISHOP;
             }
             else if (j == 3)
             {
-                piece = new Queen(*this, Point(j, i), player);
+                pieceType = PieceType::QUEEN;
             }
             else if (j == 4)
             {
-                piece = new King(*this, Point(j, i), player);
+                pieceType = PieceType::KING;
             }
             else
             {
                 throw std::logic_error("Invalid piece type");
             }
 
-            this->_pieces[i][j] = piece;
+            this->_pieces[i][j] = Piece::fromType(pieceType, *this, Point(j, i), player);
         }
     }
 }

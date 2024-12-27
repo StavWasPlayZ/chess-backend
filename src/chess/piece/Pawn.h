@@ -12,6 +12,7 @@ namespace chess
         virtual MoveResult validateMove(const Point& destination) const override;
         virtual char marker() const override;
         virtual int value() const override;
+        virtual PieceType getType() const override;
 
         virtual void onMoved(const Piece* const devouredPiece) override;
 

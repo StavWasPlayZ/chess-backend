@@ -26,3 +26,8 @@ int chess::Bishop::value() const
 {
     return 3;
 }
+
+PieceType chess::Bishop::getType() const
+{
+    return PieceType::BISHOP;
+}
