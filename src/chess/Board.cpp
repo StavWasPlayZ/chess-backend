@@ -264,7 +264,11 @@ bool chess::Board::_isValidPawnSwitch(const PieceType pieceType) const
 
 void chess::Board::_acknowledgeCheckResult(MoveResult &currRes, const Player &player) const
 {
-    if (player != *getCheckPlayer())
+    const Player* checkPlayer = getCheckPlayer();
+    if (checkPlayer == nullptr)
+        return;
+
+    if (player != *checkPlayer)
         return;
     
     if (player == *getCheckmatePlayer())
