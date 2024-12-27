@@ -169,6 +169,7 @@ MoveResult chess::Board::switchPawnTo(const PieceType pieceType, Player &initiat
     delete this->_switchingPawn;
     this->_switchingPawn = nullptr;
 
+    this->_playerTurn = 1 - this->_playerTurn;
     return res;
 }
 
