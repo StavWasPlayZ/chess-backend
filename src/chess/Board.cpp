@@ -78,13 +78,18 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
     if (piece == nullptr)
         return MoveResult::NO_TOOL;
 
+    Piece* const overPiece = getPieceAt(destination);
+
+    // Can't eat le'king
+    if ((overPiece != nullptr) && (overPiece->getType() == PieceType::KING))
+        return MoveResult::ILLEGAL_MOVE;
+
+
     MoveResult res = piece->validateMove(destination);
 
     if (!util::isLegal(res))
         return res;
-    
-    
-    Piece* const overPiece = getPieceAt(destination);
+
 
     removePieceAt(source);
     _setPieceAt(destination, *piece);
