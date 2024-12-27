@@ -44,6 +44,14 @@ static void startBackend()
  * 
  * The frontend should send movement strings appended by player number,
  * such as "e3d20".
+ * 
+ * When on a pawn-changing state, the frontend should send
+ * a string in the format of piece type to player type,
+ * such as "10" (King for White).
+ * See `chess::PieceType` for all piece type codes.
+ * The switching pawn should be agreed upon by both sides, and thus
+ * does not need to be supplied necessarily.
+ * 
  * The backend will respond with simply the appropriate status code.
  * Upon request error, the server will return "wtf".
  * 
@@ -63,22 +71,56 @@ static void gameLifecycle(NAMED_PIPE& pipe)
         if (msg == "ext")
             break;
 
-        if (msg.length() != 5)
+        bool processRes;
+
+        if (chessboard.isInSwitchPawnState())
+        {
+            processRes = processPawnChangingMsg(msg, chessboard, pipe);
+        }
+        else
+        {
+            processRes = processMoveMsg(msg, chessboard, pipe);
+        }
+
+        if (!processRes)
         {
             pipe.sendMsg("wtf");
             continue;
         }
 
-        const chess::Player& player = chessboard.getPlayer(msg[4] - '0');
-
-        pipe.sendMsg(std::to_string(
-            (int) chessboard.movePiece(msg.substr(0, 4), player))
-        );
-
         consoleApp.draw();
     };
 
     std::cout << "\nQuitting..." << std::endl;
+}
+
+// Message processors.
+// Will return false when the message failed to process.
+
+static bool processMoveMsg(const std::string& msg, chess::Board chessboard, NAMED_PIPE& pipe)
+{
+    if (msg.length() != 5)
+        return false;
+
+    const chess::Player& player = chessboard.getPlayer(msg[4] - '0');
+
+    pipe.sendMsg(std::to_string(
+        (int) chessboard.movePiece(msg.substr(0, 4), player))
+    );
+    return true;
+}
+static bool processPawnChangingMsg(const std::string& msg, chess::Board chessboard, NAMED_PIPE& pipe)
+{
+    if (msg.length() != 2)
+        return false;
+
+    chess::Player& player = chessboard.getPlayer(msg[1] - '0');
+    const chess::PieceType pieceType = (chess::PieceType) (msg[0] - '0');
+
+    pipe.sendMsg(std::to_string(
+        (int) chessboard.switchPawnTo(pieceType, player))
+    );
+    return true;
 }
 
 
