@@ -7,8 +7,8 @@
 
 static void startBackend();
 static void gameLifecycle(NAMED_PIPE& pipe);
-static bool processMoveMsg(const std::string& msg, chess::Board chessboard, NAMED_PIPE& pipe);
-static bool processPawnChangingMsg(const std::string& msg, chess::Board chessboard, NAMED_PIPE& pipe);
+static bool processMoveMsg(const std::string& msg, chess::Board& chessboard, NAMED_PIPE& pipe);
+static bool processPawnChangingMsg(const std::string& msg, chess::Board& chessboard, NAMED_PIPE& pipe);
 // static void clearConsole();
 
 int main(int argc, char const *argv[])
@@ -99,7 +99,7 @@ static void gameLifecycle(NAMED_PIPE& pipe)
 // Message processors.
 // Will return false when the message failed to process.
 
-static bool processMoveMsg(const std::string& msg, chess::Board chessboard, NAMED_PIPE& pipe)
+static bool processMoveMsg(const std::string& msg, chess::Board& chessboard, NAMED_PIPE& pipe)
 {
     if (msg.length() != 5)
         return false;
@@ -111,7 +111,7 @@ static bool processMoveMsg(const std::string& msg, chess::Board chessboard, NAME
     );
     return true;
 }
-static bool processPawnChangingMsg(const std::string& msg, chess::Board chessboard, NAMED_PIPE& pipe)
+static bool processPawnChangingMsg(const std::string& msg, chess::Board& chessboard, NAMED_PIPE& pipe)
 {
     if (msg.length() != 2)
         return false;
