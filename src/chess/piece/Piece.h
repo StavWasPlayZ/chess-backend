@@ -40,6 +40,7 @@ namespace chess
 
         virtual void onMoved(const Piece* const devouredPiece);
         void onRemovedFromBoard();
+        void onAddedToBoard();
 
     protected:
         char asPlayerMarker(const char marker) const;

@@ -360,6 +360,7 @@ void chess::Board::_populateBoard()
             }
 
             this->_pieces[i][j] = Piece::fromType(pieceType, *this, Point(j, i), player);
+            this->_pieces[i][j]->onAddedToBoard();
         }
     }
 }

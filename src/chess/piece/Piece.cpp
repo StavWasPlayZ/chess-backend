@@ -27,9 +27,7 @@ Piece* chess::Piece::fromType(const PieceType type, Board &board, const Point &p
 }
 
 chess::Piece::Piece(Board &board, const Point &position, Player &player) : _board(&board), _pos(new Point(position)), _player(player)
-{
-    _player.addPiece(*this);
-}
+{}
 
 chess::Piece::~Piece()
 {
@@ -86,6 +84,11 @@ void chess::Piece::onRemovedFromBoard()
     this->_board = nullptr;
     delete _pos;
     this->_pos = nullptr;
+}
+
+void chess::Piece::onAddedToBoard()
+{
+    _player.addPiece(*this);
 }
 
 char chess::Piece::asPlayerMarker(const char marker) const
