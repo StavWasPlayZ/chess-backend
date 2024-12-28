@@ -35,6 +35,7 @@ namespace chess
          */
         const Point* getPosition() const;
         Board* getBoard() const;
+        bool wasMoved() const;
 
         bool isOnBoard() const;
 
@@ -54,6 +55,8 @@ namespace chess
         MoveResult validateDiagonalMovement(const Point& destination) const;
 
     private:
+        bool _wasMoved;
+
         Player& _player;
         Board* _board;
         /**

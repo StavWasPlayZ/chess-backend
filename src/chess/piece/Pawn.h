@@ -13,13 +13,5 @@ namespace chess
         virtual char marker() const override;
         virtual int value() const override;
         virtual PieceType getType() const override;
-
-        virtual void onMoved(const Piece* const devouredPiece) override;
-
-    private:
-        /**
-         * Used to determine the first double-jump
-        */
-        bool wasMoved;
     };
 }

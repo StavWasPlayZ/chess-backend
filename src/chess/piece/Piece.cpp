@@ -26,7 +26,11 @@ Piece* chess::Piece::fromType(const PieceType type, Board &board, const Point &p
     throw std::invalid_argument("Invalid chess piece type");
 }
 
-chess::Piece::Piece(Board &board, const Point &position, Player &player) : _board(&board), _pos(new Point(position)), _player(player)
+chess::Piece::Piece(Board &board, const Point &position, Player &player) :
+    _board(&board),
+    _pos(new Point(position)),
+    _player(player),
+    _wasMoved(false)
 {}
 
 chess::Piece::~Piece()
@@ -43,7 +47,7 @@ MoveResult chess::Piece::validateMove(const Point &destination) const
         return MoveResult::OUT_OF_BOUNDS;
 
     const Piece* const destPiece = getBoard()->getPieceAt(destination);
-    
+
     if ((destPiece != nullptr) && (destPiece->getPlayer() == this->getPlayer()))
         return MoveResult::FRIENDLY_FIRE;
 
@@ -74,12 +78,20 @@ Board *chess::Piece::getBoard() const
     return this->_board;
 }
 
+bool chess::Piece::wasMoved() const
+{
+    return this->_wasMoved;
+}
+
 bool chess::Piece::isOnBoard() const
 {
     return getBoard() != nullptr;
 }
 
-void chess::Piece::onMoved(const Piece* const devouredPiece) {}
+void chess::Piece::onMoved(const Piece* const devouredPiece)
+{
+    this->_wasMoved = true;
+}
 
 void chess::Piece::onRemovedFromBoard()
 {

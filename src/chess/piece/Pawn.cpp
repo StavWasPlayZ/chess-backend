@@ -3,7 +3,7 @@
 using namespace chess;
 
 chess::Pawn::Pawn(Board &board, const Point &position, Player &player) :
-    Piece(board, position, player), wasMoved(false)
+    Piece(board, position, player)
 {}
 
 MoveResult chess::Pawn::validateMove(const Point &destination) const
@@ -52,7 +52,7 @@ MoveResult chess::Pawn::validateMove(const Point &destination) const
 
     if (abs(displacement.y) == 2)
     {
-        if (wasMoved || (displacement.x != 0))
+        if (wasMoved() || (displacement.x != 0))
             return MoveResult::ILLEGAL_MOVE;
 
         if (isInterferenceInRoute(displacement.normalize(), 3))
@@ -77,9 +77,4 @@ int chess::Pawn::value() const
 PieceType chess::Pawn::getType() const
 {
     return PieceType::PAWN;
-}
-
-void chess::Pawn::onMoved(const Piece *const devouredPiece)
-{
-    this->wasMoved = true;
 }
