@@ -21,6 +21,12 @@ MoveResult chess::King::validateMove(const Point &destination) const
     if ((len1 <= 1) && (len2 <= 1))
         return MoveResult::LEGAL_MOVE;
 
+    //NOTE: Castling was almost implemented, but
+    // there was a shortage of time in the end.
+    // // Could be trying to perform Castling
+    // if (_mayPerformCastling(destination))
+    //     return MoveResult::CASTLING;
+
     return MoveResult::ILLEGAL_MOVE;
 }
 
@@ -37,4 +43,37 @@ int chess::King::value() const
 PieceType chess::King::getType() const
 {
     return PieceType::KING;
+}
+
+void chess::King::onMoved(const MoveResult moveResult, const Point &source, const Piece *const devouredPiece)
+{
+    // if (moveResult == MoveResult::CASTLING)
+    // {
+
+    // }
+
+    Piece::onMoved(moveResult, source, devouredPiece);
+}
+
+bool chess::King::_mayPerformCastling(const Point& destination) const
+{
+    const Point displacement = getPosition()->displacementFrom(destination);
+
+    if (displacement.y != 0)
+        return false;
+
+    const Piece* const piece = getBoard()->getPieceAt(destination);
+    if (piece == nullptr)
+        return false;
+
+    if (piece->getType() != PieceType::ROOK)
+        return false;
+
+    // Displacement X can either be negative for left
+    // or positive for right. Hence direction
+    // vector's polarity doen't really matter.
+    if (isInterferenceInRoute(Point(0, 1), displacement.x))
+        return false;
+
+    return true;
 }

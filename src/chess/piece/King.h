@@ -13,5 +13,9 @@ namespace chess
         virtual char marker() const override;
         virtual int value() const override;
         virtual PieceType getType() const override;
+        virtual void onMoved(const MoveResult moveResult, const Point& source, const Piece* const devouredPiece) override;
+
+    private:
+        bool _mayPerformCastling(const Point& destination) const;
     };
 }
