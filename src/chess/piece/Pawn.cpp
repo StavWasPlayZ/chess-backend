@@ -54,27 +54,10 @@ MoveResult chess::Pawn::validateMove(const Point &destination) const
             }
 
             // Could be En Passant
-            const Point epPos = destination + (
-                (getPlayer().number == 0)
-                    ? Point(0, 1)
-                    : Point(0, -1)
-            );
+            if (_getEnPassantPiece(destination) != nullptr)
+                return MoveResult::EN_PASSANT;
 
-            Piece* epPiece = getBoard()->getPieceAt(epPos);
-            if (epPiece == nullptr)
-                return MoveResult::ILLEGAL_MOVE;
-            
-            if (epPiece->getType() != PieceType::PAWN)
-                return MoveResult::ILLEGAL_MOVE;
-
-            if (!((Pawn*)epPiece)->_mayEnPassant)
-                return MoveResult::ILLEGAL_MOVE;
-
-            // 'Tis en-passant - devour epPiece and legalize the move.
-            getBoard()->removePiece(*epPiece);
-            getPlayer().devour(epPiece);
-
-            return MoveResult::EN_PASSANT;
+            return MoveResult::ILLEGAL_MOVE;
         }
     }
 
@@ -107,10 +90,17 @@ PieceType chess::Pawn::getType() const
     return PieceType::PAWN;
 }
 
-void chess::Pawn::onMoved(const Point& source, const Piece* const devouredPiece)
+void chess::Pawn::onMoved(const MoveResult moveResult, const Point& source, const Piece* const devouredPiece)
 {
+    if (moveResult == MoveResult::EN_PASSANT)
+    {
+        Pawn* enPassanted = _getEnPassantPieceUnsafe(*getPosition());
+        getBoard()->removePiece(*enPassanted);
+        getPlayer().devour(enPassanted);
+    }
+
     // May only perform En Passant if this was our first time moving.
-    if (!wasMoved())
+    else if (!wasMoved())
     {
         const Point displacement = source.displacementFrom(*getPosition());
         if (abs(displacement.y) == 2)
@@ -119,7 +109,7 @@ void chess::Pawn::onMoved(const Point& source, const Piece* const devouredPiece)
         }
     }
 
-    Piece::onMoved(source, devouredPiece);
+    Piece::onMoved(moveResult, source, devouredPiece);
 }
 
 void chess::Pawn::onBoardUpdated(const BoardOperationType operationType)
@@ -146,4 +136,35 @@ void chess::Pawn::onBoardUpdated(const BoardOperationType operationType)
     }
 
     Piece::onBoardUpdated(operationType);
+}
+
+Pawn *chess::Pawn::_getEnPassantPiece(const Point& point) const
+{
+    const Piece* epPiece = getBoard()->getPieceAt(_getEnPassantPos(point));
+    if (epPiece == nullptr)
+        return nullptr;
+    
+    if (epPiece->getType() != PieceType::PAWN)
+        return nullptr;
+
+    Pawn* asPawn = (Pawn*) epPiece;
+
+    if (!asPawn->_mayEnPassant)
+        return nullptr;
+
+    return asPawn;
+}
+
+Pawn *chess::Pawn::_getEnPassantPieceUnsafe(const Point &point) const
+{
+    return (Pawn*) getBoard()->getPieceAt(_getEnPassantPos(point));
+}
+
+Point chess::Pawn::_getEnPassantPos(const Point source) const
+{
+    return source + (
+        (getPlayer().number == 0)
+            ? Point(0, 1)
+            : Point(0, -1)
+    );
 }

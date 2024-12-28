@@ -88,7 +88,7 @@ bool chess::Piece::isOnBoard() const
     return getBoard() != nullptr;
 }
 
-void chess::Piece::onMoved(const Point& source, const Piece* const devouredPiece)
+void chess::Piece::onMoved(const MoveResult moveResult, const Point& source, const Piece* const devouredPiece)
 {
     this->_wasMoved = true;
 }

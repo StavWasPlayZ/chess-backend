@@ -40,7 +40,7 @@ namespace chess
 
         bool isOnBoard() const;
 
-        virtual void onMoved(const Point& source, const Piece* const devouredPiece);
+        virtual void onMoved(const MoveResult moveResult, const Point& source, const Piece* const devouredPiece);
         void onRemovedFromBoard();
         void onAddedToBoard();
         /**
