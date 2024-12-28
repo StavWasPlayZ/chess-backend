@@ -6,10 +6,11 @@ using namespace chess;
 
 chess::Player::Player(Board& board, const int number) :
     number(number),
-    _pieces(_PIECES_PER_PLAYER),
     _board(board),
     _mayPerformCastling(true)
-{}
+{
+    _pieces.reserve(_PIECES_PER_PLAYER);
+}
 
 chess::Player::~Player()
 {
