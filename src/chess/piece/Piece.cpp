@@ -41,6 +41,9 @@ MoveResult chess::Piece::validateMove(const Point &destination) const
         return MoveResult::SAME_PLACE;
     }
 
+    if (destination.isOutOfBounds())
+        return MoveResult::OUT_OF_BOUNDS;
+
     const Piece* const destPiece = getBoard()->getPieceAt(destination);
     if ((destPiece != nullptr) && (destPiece->getPlayer() == this->getPlayer()))
     {

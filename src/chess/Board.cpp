@@ -75,7 +75,10 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
         // and not some random integer passed on as part of a message.
         return MoveResult::ILLEGAL_MOVE;
     }
-    
+
+    // We also check this here to correctly return
+    // the MoveResult::OUT_OF_BOUNDS error before
+    // MoveResult::NO_TOOL throws.
     if (source.isOutOfBounds() || destination.isOutOfBounds())
         return MoveResult::OUT_OF_BOUNDS;
 
@@ -251,8 +254,6 @@ Player *chess::Board::getCheckmatePlayer(Player& checkPlayer)
         dest += orgPos;
         Piece* destPiece = getPieceAt(dest);
 
-        //TODO add out of bounds check to validateMove
-
         // Even king can't eat other le'king
         if ((destPiece != nullptr) && (destPiece->getType() == PieceType::KING))
             continue;
@@ -296,6 +297,9 @@ Piece* const (&chess::Board::getPieces() const)[Board::BOARD_SIZE][Board::BOARD_
 
 Piece *chess::Board::getPieceAt(const Point &point) const
 {
+    if (point.isOutOfBounds())
+        return nullptr;
+    
     return this->_pieces[point.y][point.x];
 }
 
