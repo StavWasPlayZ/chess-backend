@@ -3,7 +3,7 @@
 using namespace chess;
 
 chess::Pawn::Pawn(Board &board, const Point &position, Player &player) :
-    Piece(board, position, player)
+    Piece(board, position, player), _mayEnPassant(false)
 {}
 
 MoveResult chess::Pawn::validateMove(const Point &destination) const
@@ -77,4 +77,23 @@ int chess::Pawn::value() const
 PieceType chess::Pawn::getType() const
 {
     return PieceType::PAWN;
+}
+
+void chess::Pawn::onMoved(const Point& source, const Piece* const devouredPiece)
+{
+    // May only perform En Passant if this was our first time moving.
+    if (!wasMoved())
+    {
+        const Point displacement = source.displacementFrom(*getPosition());
+        if (abs(displacement.y) == 2)
+        {
+            _mayEnPassant = true;
+        }
+    }
+    else
+    {
+        _mayEnPassant = false;
+    }
+
+    Pawn::onMoved(source, devouredPiece);
 }

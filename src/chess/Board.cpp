@@ -86,6 +86,8 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
     if (piece == nullptr)
         return MoveResult::NO_TOOL;
 
+    Point orgPos = *piece->getPosition();
+
     Piece* const overPiece = getPieceAt(destination);
 
     // Can't eat le'king
@@ -137,7 +139,7 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
         }
     }
 
-    piece->onMoved(overPiece);
+    piece->onMoved(orgPos, overPiece);
 
     _acknowledgeCheckResult(res, initiator, checkPlayer);
 
