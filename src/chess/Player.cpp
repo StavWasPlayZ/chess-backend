@@ -6,8 +6,7 @@ using namespace chess;
 
 chess::Player::Player(Board& board, const int number) :
     number(number),
-    _board(board),
-    _mayPerformCastling(true)
+    _board(board)
 {
     _pieces.reserve(_PIECES_PER_PLAYER);
 }
@@ -18,16 +17,6 @@ chess::Player::~Player()
     {
         delete _devouredPieces[i];
     }
-}
-
-bool chess::Player::mayPerformCastling() const
-{
-    return this->_mayPerformCastling;
-}
-
-void chess::Player::disallowCastling()
-{
-    this->_mayPerformCastling = false;
 }
 
 Board &chess::Player::getBoard() const

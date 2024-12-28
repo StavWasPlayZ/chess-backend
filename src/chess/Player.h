@@ -22,9 +22,6 @@ namespace chess
          */
         const int number;
 
-        bool mayPerformCastling() const;
-        void disallowCastling();
-
         Board& getBoard() const;
 
         void addPiece(Piece& piece);
@@ -54,6 +51,5 @@ namespace chess
         King* _king;
 
         std::vector<const Piece*> _devouredPieces;
-        bool _mayPerformCastling;
     };
 }
