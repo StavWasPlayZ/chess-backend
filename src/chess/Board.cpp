@@ -167,8 +167,12 @@ MoveResult chess::Board::switchPawnTo(const PieceType pieceType, Player &initiat
     const Point& pos = *this->_switchingPawn->getPosition();
 
     Piece* newPiece = Piece::fromType(pieceType, *this, pos, initiator);
+
+    // Replace the old piece with the new
     _setPieceAt(pos, *newPiece);
 
+    initiator.removePiece(*this->_switchingPawn);
+    initiator.addPiece(*newPiece);
 
     // Check for self-check
     Player* const checkPlayer = getCheckPlayer();
@@ -176,6 +180,10 @@ MoveResult chess::Board::switchPawnTo(const PieceType pieceType, Player &initiat
     {
         // Revert piece
         _setPieceAt(pos, *this->_switchingPawn);
+
+        initiator.removePiece(*newPiece);
+        initiator.addPiece(*this->_switchingPawn);
+
         delete newPiece;
 
         return MoveResult::SELF_CHECK;
