@@ -199,9 +199,22 @@ bool chess::Board::removePiece(const Piece &piece)
 Player *chess::Board::getCheckPlayer() const
 {
     return nullptr;
+    // // For each player
+    // for (const Player& player : this->_players)
+    // {
+    //     // Check the board
+    //     for (size_t i = 0; i < BOARD_SIZE; i++)
+    //     {
+    //         for (size_t j = 0; j < BOARD_SIZE; j++)
+    //         {
+    //             const Piece* const piece = getPieceAt(Point(j, i));
+
+    //         }
+    //     }
+    // }
 }
 
-Player *chess::Board::getCheckmatePlayer() const
+Player *chess::Board::getCheckmatePlayer(const Player& checkPlayer) const
 {
     return nullptr;
 }
@@ -281,7 +294,7 @@ void chess::Board::_acknowledgeCheckResult(MoveResult &currRes, const Player &pl
     if (player != *checkPlayer)
         return;
     
-    if (player == *getCheckmatePlayer())
+    if (player == *getCheckmatePlayer(*checkPlayer))
     {
         currRes = MoveResult::CHECKMATE;
     }
@@ -347,12 +360,6 @@ void chess::Board::_populateBoard()
             }
 
             this->_pieces[i][j] = Piece::fromType(pieceType, *this, Point(j, i), player);
-
-            // Update the King reference to the player
-            if (pieceType == PieceType::KING)
-            {
-                player.setKing((King&) *this->_pieces[i][j]);
-            }
         }
     }
 }

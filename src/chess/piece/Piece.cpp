@@ -27,7 +27,9 @@ Piece* chess::Piece::fromType(const PieceType type, Board &board, const Point &p
 }
 
 chess::Piece::Piece(Board &board, const Point &position, Player &player) : _board(&board), _pos(new Point(position)), _player(player)
-{}
+{
+    _player.addPiece(*this);
+}
 
 chess::Piece::~Piece()
 {
@@ -79,6 +81,8 @@ void chess::Piece::onMoved(const Piece* const devouredPiece) {}
 
 void chess::Piece::onRemovedFromBoard()
 {
+    getPlayer().removePiece(*this);
+
     this->_board = nullptr;
     delete _pos;
     this->_pos = nullptr;

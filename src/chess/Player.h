@@ -27,11 +27,13 @@ namespace chess
 
         Board& getBoard() const;
 
+        void addPiece(Piece& piece);
+        void removePiece(const Piece& piece);
+        const std::vector<Piece*>& getPieces() const;
         King& getKing() const;
-        void setKing(King& king);
 
 
-        void devour(const Piece* const piece);
+        void devour(Piece* const piece);
         const std::vector<const Piece*> getDevouredPieces() const;
 
         int getPointsTotal() const;
@@ -45,7 +47,10 @@ namespace chess
         Player& getOther() const;
 
     private:
+        static constexpr int _PIECES_PER_PLAYER = 16;
         Board& _board;
+
+        std::vector<Piece*> _pieces;
         King* _king;
 
         std::vector<const Piece*> _devouredPieces;

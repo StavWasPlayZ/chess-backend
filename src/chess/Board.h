@@ -67,8 +67,9 @@ namespace chess
         /**
          * Returns: The player that has a checkmate status.
          * Null for none.
+         * Input: The playing nominated for a checkmate
          */
-        Player* getCheckmatePlayer() const;
+        Player* getCheckmatePlayer(const Player& checkPlayer) const;
 
         Piece* const (&getPieces() const)[BOARD_SIZE][BOARD_SIZE];
 
