@@ -95,6 +95,11 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
 
     _moveInternal(*piece, destination);
 
+    if (overPiece != nullptr)
+    {
+        overPiece->getPlayer().removePiece(*overPiece);
+    }
+
     // Check for self-check
     Player* const checkPlayer = getCheckPlayer();
     if ((checkPlayer != nullptr) && (initiator != *checkPlayer))
@@ -109,6 +114,7 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
         else
         {
             _setPieceAt(destination, *overPiece);
+            overPiece->getPlayer().addPiece(*overPiece);
         }
 
         return MoveResult::SELF_CHECK;
