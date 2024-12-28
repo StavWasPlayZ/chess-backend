@@ -66,13 +66,13 @@ MoveResult chess::Pawn::validateMove(const Point &destination) const
                 return MoveResult::ILLEGAL_MOVE;
 
             if (!((Pawn*)epPiece)->_mayEnPassant)
-                return MoveResult::EN_PASSANT;
+                return MoveResult::ILLEGAL_MOVE;
 
             // 'Tis en-passant - devour epPiece and legalize the move.
             getBoard()->removePiece(*epPiece);
             getPlayer().devour(epPiece);
 
-            return MoveResult::LEGAL_MOVE;
+            return MoveResult::EN_PASSANT;
         }
     }
 
