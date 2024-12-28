@@ -230,6 +230,9 @@ Player *chess::Board::getCheckmatePlayer(Player& checkPlayer)
 
     Player* result = &checkPlayer;
 
+    // We're gonna be moving the king a bunch of times.
+    removePieceAt(orgPos);
+
     // King may move to 8 places at most
     for (int i = 0; i < 8; i++)
     {
@@ -244,6 +247,8 @@ Player *chess::Board::getCheckmatePlayer(Player& checkPlayer)
         dest += orgPos;
         Piece* destPiece = getPieceAt(dest);
 
+        //TODO add out of bounds check to validateMove
+
         // Even king can't eat other le'king
         if ((destPiece != nullptr) && (destPiece->getType() == PieceType::KING))
             continue;
@@ -251,7 +256,7 @@ Player *chess::Board::getCheckmatePlayer(Player& checkPlayer)
         if (!util::isLegal(otherKing.validateMove(dest)))
             continue;
         
-        _moveInternal(otherKing, dest);
+        _setPieceAt(dest, otherKing);
         
         // If checkPlayer is still at check after the king "escaped",
         // it means this route is blocked.
