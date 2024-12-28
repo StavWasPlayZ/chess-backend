@@ -42,9 +42,35 @@ MoveResult chess::Pawn::validateMove(const Point &destination) const
             if (abs(displacement.x) != 1)
                 return MoveResult::ILLEGAL_MOVE;
 
-            // Must be eating the *opposing* player
-            if ((destPiece == nullptr) || (destPiece->getPlayer() == getPlayer()))
+            if (destPiece != nullptr)
+            {
+                // Must be eating the *opposing* player
+                if (destPiece->getPlayer() == getPlayer())
+                    return MoveResult::ILLEGAL_MOVE;
+
+                return MoveResult::LEGAL_MOVE;
+            }
+
+            // Could be En Passant
+            const Point epPos = destination + (
+                (getPlayer().number == 0)
+                    ? Point(0, 1)
+                    : Point(0, -1)
+            );
+
+            Piece* epPiece = getBoard()->getPieceAt(epPos);
+            if (epPiece == nullptr)
                 return MoveResult::ILLEGAL_MOVE;
+            
+            if (epPiece->getType() != PieceType::PAWN)
+                return MoveResult::ILLEGAL_MOVE;
+
+            if (!((Pawn*)epPiece)->_mayEnPassant)
+                return MoveResult::EN_PASSANT;
+
+            // 'Tis en-passant - devour epPiece and legalize the move.
+            getBoard()->removePiece(*epPiece);
+            getPlayer().devour(epPiece);
 
             return MoveResult::LEGAL_MOVE;
         }
@@ -95,5 +121,5 @@ void chess::Pawn::onMoved(const Point& source, const Piece* const devouredPiece)
         _mayEnPassant = false;
     }
 
-    Pawn::onMoved(source, devouredPiece);
+    Piece::onMoved(source, devouredPiece);
 }

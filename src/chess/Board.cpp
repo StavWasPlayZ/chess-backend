@@ -140,8 +140,8 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
     }
 
     piece->onMoved(orgPos, overPiece);
-
-    _acknowledgeCheckResult(res, initiator, checkPlayer);
+    // onMoved may have performed a special move; re-calculate the checkPlayer.
+    _acknowledgeCheckResult(res, initiator);
 
     if (!isInSwitchPawnState())
     {

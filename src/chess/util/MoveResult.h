@@ -17,7 +17,10 @@ namespace chess
         ILLEGAL_MOVE,
         SAME_PLACE,
 
-        CHECKMATE
+        CHECKMATE,
+
+        // Custom
+        EN_PASSANT
     };
 
     namespace util
