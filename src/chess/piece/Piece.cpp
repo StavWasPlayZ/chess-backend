@@ -47,9 +47,9 @@ MoveResult chess::Piece::validateMove(const Point &destination) const
         return MoveResult::FRIENDLY_FIRE;
     }
 
-    // Can't eat le'king
-    if ((destPiece != nullptr) && (destPiece->getType() == PieceType::KING))
-        return MoveResult::ILLEGAL_MOVE;
+    //NOTE: The king check is done only at move time.
+    // This is because validateMove is also used to check
+    // for a check (moving to king).
 
     return MoveResult::LEGAL_MOVE;
 }

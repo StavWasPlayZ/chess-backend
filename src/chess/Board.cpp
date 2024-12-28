@@ -85,6 +85,10 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
 
     Piece* const overPiece = getPieceAt(destination);
 
+    // Can't eat le'king
+    if ((overPiece != nullptr) && (overPiece->getType() == PieceType::KING))
+        return MoveResult::ILLEGAL_MOVE;
+
 
     MoveResult res = piece->validateMove(destination);
 
@@ -206,7 +210,8 @@ Player *chess::Board::getCheckPlayer() const
         // Vs. this player's pieces
         for (const Piece* piece : player->getPieces())
         {
-            if (util::isLegal(piece->validateMove(*otherKing.getPosition())))
+            const MoveResult moveToKingRes = piece->validateMove(*otherKing.getPosition());
+            if (util::isLegal(moveToKingRes))
             {
                 // Piece may move to king - AKA check.
                 return player;
@@ -238,6 +243,10 @@ Player *chess::Board::getCheckmatePlayer(Player& checkPlayer)
 
         dest += orgPos;
         Piece* destPiece = getPieceAt(dest);
+
+        // Even king can't eat other le'king
+        if ((destPiece != nullptr) && (destPiece->getType() == PieceType::KING))
+            continue;
 
         if (!util::isLegal(otherKing.validateMove(dest)))
             continue;
@@ -342,7 +351,10 @@ void chess::Board::_acknowledgeCheckResult(MoveResult &currRes, const Player &pl
     if (player != *checkPlayer)
         return;
     
-    if (player == *getCheckmatePlayer(*checkPlayer))
+
+    const Player* checkmatePlayer = getCheckmatePlayer(*checkPlayer);
+
+    if ((checkmatePlayer != nullptr) && (player == *checkmatePlayer))
     {
         currRes = MoveResult::CHECKMATE;
     }
