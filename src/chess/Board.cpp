@@ -326,37 +326,15 @@ void chess::Board::_populateBoard()
 
             Player& player = this->_players[(i < (BOARD_SIZE / 2)) ? 1 : 0];
 
-            if (populationType == RowPopuplationType::PAWNS)
-            {
-                this->_pieces[i][j] = new Pawn(*this, Point(j, i), player);
-                continue;
-            }
-
             PieceType pieceType;
 
-            if (mirrorCheck(j, 0))
+            if (populationType == RowPopuplationType::PAWNS)
             {
-                pieceType = PieceType::ROOK;
-            }
-            else if (mirrorCheck(j, 1))
-            {
-                pieceType = PieceType::KNIGHT;
-            }
-            else if (mirrorCheck(j, 2))
-            {
-                pieceType = PieceType::BISHOP;
-            }
-            else if (j == 3)
-            {
-                pieceType = PieceType::QUEEN;
-            }
-            else if (j == 4)
-            {
-                pieceType = PieceType::KING;
+                pieceType = PieceType::PAWN;
             }
             else
             {
-                throw std::logic_error("Invalid piece type");
+                pieceType = _pieceTypeByColumn(j);
             }
 
             this->_pieces[i][j] = Piece::fromType(pieceType, *this, Point(j, i), player);
@@ -385,4 +363,32 @@ Board::RowPopuplationType chess::Board::_getRowPopulationType(const int row) con
         : mirrorCheck(row, 1)
             ? RowPopuplationType::PAWNS
         : RowPopuplationType::NONE;
+}
+
+PieceType chess::Board::_pieceTypeByColumn(const int column) const
+{
+    if (mirrorCheck(column, 0))
+    {
+        return PieceType::ROOK;
+    }
+    else if (mirrorCheck(column, 1))
+    {
+        return PieceType::KNIGHT;
+    }
+    else if (mirrorCheck(column, 2))
+    {
+        return PieceType::BISHOP;
+    }
+    else if (column == 3)
+    {
+        return PieceType::QUEEN;
+    }
+    else if (column == 4)
+    {
+        return PieceType::KING;
+    }
+    else
+    {
+        throw std::logic_error("Invalid piece type");
+    }
 }

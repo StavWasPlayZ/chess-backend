@@ -133,11 +133,14 @@ namespace chess
          */
         void _freeBoard();
 
+
         enum class RowPopuplationType
         {
             NONE, PAWNS, ALL_ELSE
         };
+
         RowPopuplationType _getRowPopulationType(const int row) const;
+        PieceType _pieceTypeByColumn(const int column) const;
 
 
         /**
