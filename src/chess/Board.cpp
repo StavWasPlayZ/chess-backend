@@ -233,10 +233,14 @@ Player *chess::Board::getCheckmatePlayer(Player& checkPlayer)
     // We're gonna be moving the king a bunch of times.
     removePieceAt(orgPos);
 
-    // King may move to 8 places at most
-    for (int i = 0; i < 8; i++)
+    // King may move to 8 places at most,
+    // where the first is just 0, 0.
+    for (int i = 1; i < 9; i++)
     {
         Point dest = Point(i / 2, i % 2);
+
+        if (dest.x == 0 && dest.y == 0)
+            return;
 
         if (i > 3)
         {
