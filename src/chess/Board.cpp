@@ -4,6 +4,7 @@ using namespace chess;
 
 #include "./piece/Pawn.h"
 #include "./piece/King.h"
+#include "./util/Utils.h"
 
 #include <sstream>
 
@@ -16,15 +17,6 @@ const PieceType Board::_PAWN_SWITCHABLES[Board::_PAWN_SWITCHABLES_SIZE] =
     PieceType::KNIGHT
 };
 
-
-/**
- * Checks if the goal was reached from either the
- * beggining or end of an array.
- */
-static bool mirrorCheck(int index, int goal, int size = Board::BOARD_SIZE)
-{
-    return (index == goal) || ((index + 1) == (size - goal));
-}
 
 chess::Board::Board() :
     _playerTurn(0),
@@ -474,24 +466,24 @@ void chess::Board::_notifyBoardUpdate(const BoardOperationType operationType)
 Board::RowPopuplationType chess::Board::_getRowPopulationType(const int row) const
 {
     return
-        mirrorCheck(row, 0)
+        util::mirrorCheck(row, 0)
             ? RowPopuplationType::ALL_ELSE
-        : mirrorCheck(row, 1)
+        : util::mirrorCheck(row, 1)
             ? RowPopuplationType::PAWNS
         : RowPopuplationType::NONE;
 }
 
 PieceType chess::Board::_pieceTypeByColumn(const int column) const
 {
-    if (mirrorCheck(column, 0))
+    if (util::mirrorCheck(column, 0))
     {
         return PieceType::ROOK;
     }
-    else if (mirrorCheck(column, 1))
+    else if (util::mirrorCheck(column, 1))
     {
         return PieceType::KNIGHT;
     }
-    else if (mirrorCheck(column, 2))
+    else if (util::mirrorCheck(column, 2))
     {
         return PieceType::BISHOP;
     }

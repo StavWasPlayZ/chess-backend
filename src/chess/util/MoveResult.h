@@ -20,7 +20,8 @@ namespace chess
         CHECKMATE,
 
         // Custom
-        EN_PASSANT
+        EN_PASSANT,
+        CASTLING
     };
 
     namespace util

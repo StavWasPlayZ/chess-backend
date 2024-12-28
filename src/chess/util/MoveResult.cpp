@@ -2,14 +2,15 @@
 
 using namespace chess;
 
-#define LEGAL_RESULTS_LEN 4
+#define LEGAL_RESULTS_LEN 5
 
 static constexpr chess::MoveResult LEGAL_RESULTS[LEGAL_RESULTS_LEN] = {
     MoveResult::LEGAL_MOVE,
     MoveResult::CHECK,
     MoveResult::CHECKMATE,
 
-    MoveResult::EN_PASSANT
+    MoveResult::EN_PASSANT,
+    MoveResult::CASTLING
 };
 
 bool chess::util::isLegal(const MoveResult moveResult)
