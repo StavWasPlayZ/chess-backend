@@ -107,7 +107,15 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
     {
         // Revert board
         _setPieceAt(source, *piece);
-        _setPieceAt(destination, *overPiece);
+
+        if (overPiece == nullptr)
+        {
+            removePieceAt(destination);
+        }
+        else
+        {
+            _setPieceAt(destination, *overPiece);
+        }
 
         return MoveResult::SELF_CHECK;
     }

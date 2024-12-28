@@ -37,18 +37,15 @@ chess::Piece::~Piece()
 MoveResult chess::Piece::validateMove(const Point &destination) const
 {
     if (*this->getPosition() == destination)
-    {
         return MoveResult::SAME_PLACE;
-    }
 
     if (destination.isOutOfBounds())
         return MoveResult::OUT_OF_BOUNDS;
 
     const Piece* const destPiece = getBoard()->getPieceAt(destination);
+    
     if ((destPiece != nullptr) && (destPiece->getPlayer() == this->getPlayer()))
-    {
         return MoveResult::FRIENDLY_FIRE;
-    }
 
     //NOTE: The king check is done only at move time.
     // This is because validateMove is also used to check
