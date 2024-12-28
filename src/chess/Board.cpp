@@ -147,6 +147,8 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
     {
         this->_playerTurn = 1 - this->_playerTurn;
     }
+
+    _notifyBoardUpdate();
     return res;
 }
 
@@ -452,6 +454,17 @@ void chess::Board::_freeBoard()
         {
             delete this->_pieces[i][j];
             this->_pieces[i][j] = nullptr;
+        }
+    }
+}
+
+void chess::Board::_notifyBoardUpdate()
+{
+    for (const Player* const player : this->_players)
+    {
+        for (Piece* const piece : player->getPieces())
+        {
+            piece->onBoardUpdated();
         }
     }
 }

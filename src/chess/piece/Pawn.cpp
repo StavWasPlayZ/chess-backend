@@ -3,7 +3,9 @@
 using namespace chess;
 
 chess::Pawn::Pawn(Board &board, const Point &position, Player &player) :
-    Piece(board, position, player), _mayEnPassant(false)
+    Piece(board, position, player),
+    _mayEnPassant(false),
+    _waitingOnEnPassant(false)
 {}
 
 MoveResult chess::Pawn::validateMove(const Point &destination) const
@@ -113,13 +115,28 @@ void chess::Pawn::onMoved(const Point& source, const Piece* const devouredPiece)
         const Point displacement = source.displacementFrom(*getPosition());
         if (abs(displacement.y) == 2)
         {
-            _mayEnPassant = true;
+            this->_mayEnPassant = true;
         }
-    }
-    else
-    {
-        _mayEnPassant = false;
     }
 
     Piece::onMoved(source, devouredPiece);
+}
+
+void chess::Pawn::onBoardUpdated()
+{
+    if (this->_mayEnPassant)
+    {
+        // We've already waited a whole round -
+        // No more en-passant.
+        if (_waitingOnEnPassant)
+        {
+            this->_mayEnPassant = false;
+            this->_waitingOnEnPassant = false;
+        }
+        else
+        {
+            this->_waitingOnEnPassant = true;
+        }
+
+    }
 }

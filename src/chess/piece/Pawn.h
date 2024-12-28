@@ -15,11 +15,13 @@ namespace chess
         virtual PieceType getType() const override;
 
         virtual void onMoved(const Point& source, const Piece* const devouredPiece) override;
+        virtual void onBoardUpdated() override;
 
     private:
         /**
          * Whether En Passant can be applied to this pawn
          */
         bool _mayEnPassant;
+        bool _waitingOnEnPassant;
     };
 }

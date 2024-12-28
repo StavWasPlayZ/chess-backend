@@ -129,6 +129,8 @@ namespace chess
          */
         void _freeBoard();
 
+        void _notifyBoardUpdate();
+
 
         enum class RowPopuplationType
         {

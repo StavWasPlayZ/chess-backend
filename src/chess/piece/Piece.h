@@ -42,6 +42,10 @@ namespace chess
         virtual void onMoved(const Point& source, const Piece* const devouredPiece);
         void onRemovedFromBoard();
         void onAddedToBoard();
+        /**
+         * Called when the chessboard was fully updated.
+         */
+        virtual void onBoardUpdated();
 
     protected:
         char asPlayerMarker(const char marker) const;

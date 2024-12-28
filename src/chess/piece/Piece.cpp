@@ -107,6 +107,8 @@ void chess::Piece::onAddedToBoard()
     _player.addPiece(*this);
 }
 
+void chess::Piece::onBoardUpdated() {}
+
 char chess::Piece::asPlayerMarker(const char marker) const
 {
     return (getPlayer().number == 0) ? marker : toupper(marker);
