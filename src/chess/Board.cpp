@@ -243,7 +243,7 @@ Player *chess::Board::getCheckmatePlayer(Player& checkPlayer)
         Point dest = Point(i / 2, i % 2);
 
         if (dest.x == 0 && dest.y == 0)
-            return;
+            continue;
 
         if (i > 3)
         {
