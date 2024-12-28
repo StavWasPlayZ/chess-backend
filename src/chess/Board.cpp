@@ -251,7 +251,7 @@ Player *chess::Board::getCheckmatePlayer(Player& checkPlayer)
         if (!util::isLegal(otherKing.validateMove(dest)))
             continue;
         
-        _setPieceAt(dest, otherKing);
+        _moveInternal(otherKing, dest);
         
         // If checkPlayer is still at check after the king "escaped",
         // it means this route is blocked.
@@ -265,6 +265,10 @@ Player *chess::Board::getCheckmatePlayer(Player& checkPlayer)
         if (destPiece != nullptr)
         {
             _setPieceAt(dest, *destPiece);
+        }
+        else
+        {
+            removePieceAt(dest);
         }
 
         // A single route is all it takes.
