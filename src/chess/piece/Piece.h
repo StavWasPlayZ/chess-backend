@@ -9,6 +9,7 @@ namespace chess
 {
     class Board;
     enum class PieceType;
+    enum class BoardOperationType;
 
     class Piece
     {
@@ -45,7 +46,7 @@ namespace chess
         /**
          * Called when the chessboard was fully updated.
          */
-        virtual void onBoardUpdated();
+        virtual void onBoardUpdated(const BoardOperationType operationType);
 
     protected:
         char asPlayerMarker(const char marker) const;

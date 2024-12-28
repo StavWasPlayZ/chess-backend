@@ -107,7 +107,7 @@ void chess::Piece::onAddedToBoard()
     _player.addPiece(*this);
 }
 
-void chess::Piece::onBoardUpdated() {}
+void chess::Piece::onBoardUpdated(const BoardOperationType operationType) {}
 
 char chess::Piece::asPlayerMarker(const char marker) const
 {

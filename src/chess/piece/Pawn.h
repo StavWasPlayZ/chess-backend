@@ -15,7 +15,7 @@ namespace chess
         virtual PieceType getType() const override;
 
         virtual void onMoved(const Point& source, const Piece* const devouredPiece) override;
-        virtual void onBoardUpdated() override;
+        virtual void onBoardUpdated(const BoardOperationType operationType) override;
 
     private:
         /**

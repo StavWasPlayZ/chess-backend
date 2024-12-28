@@ -148,7 +148,7 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
         this->_playerTurn = 1 - this->_playerTurn;
     }
 
-    _notifyBoardUpdate();
+    _notifyBoardUpdate(BoardOperationType::MOVE);
     return res;
 }
 
@@ -202,6 +202,8 @@ MoveResult chess::Board::switchPawnTo(const PieceType pieceType, Player &initiat
     this->_switchingPawn = nullptr;
 
     this->_playerTurn = 1 - this->_playerTurn;
+
+    _notifyBoardUpdate(BoardOperationType::PAWN_SWAP);
     return res;
 }
 
@@ -458,13 +460,13 @@ void chess::Board::_freeBoard()
     }
 }
 
-void chess::Board::_notifyBoardUpdate()
+void chess::Board::_notifyBoardUpdate(const BoardOperationType operationType)
 {
     for (const Player* const player : this->_players)
     {
         for (Piece* const piece : player->getPieces())
         {
-            piece->onBoardUpdated();
+            piece->onBoardUpdated(operationType);
         }
     }
 }

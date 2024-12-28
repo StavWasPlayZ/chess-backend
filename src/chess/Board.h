@@ -13,6 +13,7 @@ namespace chess
     struct Point;
     enum class MoveResult;
     enum class PieceType;
+    enum class BoardOperationType;
 
     class Board
     {
@@ -129,7 +130,7 @@ namespace chess
          */
         void _freeBoard();
 
-        void _notifyBoardUpdate();
+        void _notifyBoardUpdate(const BoardOperationType operationType);
 
 
         enum class RowPopuplationType
@@ -147,5 +148,11 @@ namespace chess
          */
         Player* _players[2];
         size_t _playerTurn;
+    };
+
+    enum class BoardOperationType
+    {
+        MOVE,
+        PAWN_SWAP
     };
 }

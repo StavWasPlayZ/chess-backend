@@ -122,8 +122,14 @@ void chess::Pawn::onMoved(const Point& source, const Piece* const devouredPiece)
     Piece::onMoved(source, devouredPiece);
 }
 
-void chess::Pawn::onBoardUpdated()
+void chess::Pawn::onBoardUpdated(const BoardOperationType operationType)
 {
+    if (operationType != BoardOperationType::MOVE)
+    {
+        Piece::onBoardUpdated(operationType);
+        return;
+    }
+    
     if (this->_mayEnPassant)
     {
         // We've already waited a whole round -
@@ -137,6 +143,7 @@ void chess::Pawn::onBoardUpdated()
         {
             this->_waitingOnEnPassant = true;
         }
-
     }
+
+    Piece::onBoardUpdated(operationType);
 }
