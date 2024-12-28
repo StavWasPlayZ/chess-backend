@@ -24,7 +24,10 @@ namespace chess
         Point operator*(const int other) const;
 
         Point& operator=(const Point& other);
+        Point& operator+=(const Point& other);
+
         bool operator==(const Point& other) const;
+        
 
         std::string toChessNotation() const;
     };

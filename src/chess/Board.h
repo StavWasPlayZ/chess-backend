@@ -2,7 +2,6 @@
 
 #include "./piece/Piece.h"
 #include "Player.h"
-#include <array>
 #include <string>
 
 namespace chess
@@ -50,26 +49,19 @@ namespace chess
          */
         bool removePiece(const Piece& piece);
 
-        // IMPL NOTE:
-        // Could be done that there will be an
-        // "updateCheckStatus" that updates the players'
-        // fields to contain weather each have a check,
-        // and these functions will return it.
-        // Another is that check and checkmate are
-        // evaluated seperately and individually,
-        // and we may perform these operations directly
-        // in these methods.
         /**
          * Returns: The player that has a check status.
          * Null for none.
          */
         Player* getCheckPlayer() const;
         /**
+         * Simlautes the king escaping a check, and if failes -
+         * determines a checkmate.
          * Returns: The player that has a checkmate status.
          * Null for none.
-         * Input: The playing nominated for a checkmate
+         * Input: The player nominated for a checkmate
          */
-        Player* getCheckmatePlayer(const Player& checkPlayer) const;
+        Player* getCheckmatePlayer(Player& checkPlayer);
 
         Piece* const (&getPieces() const)[BOARD_SIZE][BOARD_SIZE];
 
@@ -113,14 +105,18 @@ namespace chess
          * Params: The currect result to be switched (conditionally)
          * and the player to check against.
          */
-        void _acknowledgeCheckResult(MoveResult& currRes, const Player& player) const;
+        void _acknowledgeCheckResult(MoveResult& currRes, const Player& player);
         /**
          * Same as the original overload, but provided the checkPlayer was already determined.
          */
-        void _acknowledgeCheckResult(MoveResult& currRes, const Player& player, const Player* const checkPlayer) const;
+        void _acknowledgeCheckResult(MoveResult& currRes, const Player& player, Player* const checkPlayer);
 
 
         void _setPieceAt(const Point& pos, Piece& piece);
+        /**
+         * Moves the piece within the Board::_pieces array.
+         */
+        void _moveInternal(Piece& piece, const Point pos);
 
         /**
          * Populates the board with a new game.
@@ -146,9 +142,8 @@ namespace chess
         /**
          * Must only contain 2 players:
          * 0 = white, 1 = black.
-         * This is not an array becase Player has no default constructor.
          */
-        std::vector<Player> _players;
+        Player* _players[2];
         size_t _playerTurn;
     };
 }

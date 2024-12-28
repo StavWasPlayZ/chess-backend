@@ -75,6 +75,13 @@ bool chess::Point::operator==(const Point &other) const
     return (this->x == other.x) && (this->y == other.y);
 }
 
+Point &chess::Point::operator+=(const Point &other)
+{
+    this->x += other.x;
+    this->y += other.y;
+    return *this;
+}
+
 std::string chess::Point::toChessNotation() const
 {
     const char str[] = {

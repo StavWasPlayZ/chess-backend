@@ -3,6 +3,7 @@
 using namespace chess;
 
 #include "./piece/Pawn.h"
+#include "./piece/King.h"
 
 #include <sstream>
 
@@ -29,10 +30,9 @@ chess::Board::Board() :
     _playerTurn(0),
     _switchingPawn(nullptr)
 {
-    this->_players.reserve(2);
     for (size_t i = 0; i < 2; i++)
     {
-        this->_players.push_back(Player(*this, i));
+        this->_players[i] = new Player(*this, i);
     }
 
     _populateBoard();
@@ -41,6 +41,11 @@ chess::Board::Board() :
 chess::Board::~Board()
 {
     _freeBoard();
+
+    for (const Player* player : this->_players)
+    {
+        delete player;
+    }
 }
 
 MoveResult chess::Board::movePiece(const std::string &moveStr, const Player& initiator)
@@ -80,10 +85,6 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
 
     Piece* const overPiece = getPieceAt(destination);
 
-    // Can't eat le'king
-    if ((overPiece != nullptr) && (overPiece->getType() == PieceType::KING))
-        return MoveResult::ILLEGAL_MOVE;
-
 
     MoveResult res = piece->validateMove(destination);
 
@@ -91,11 +92,10 @@ MoveResult chess::Board::movePiece(const Point &source, const Point &destination
         return res;
 
 
-    removePieceAt(source);
-    _setPieceAt(destination, *piece);
+    _moveInternal(*piece, destination);
 
     // Check for self-check
-    const Player* const checkPlayer = getCheckPlayer();
+    Player* const checkPlayer = getCheckPlayer();
     if ((checkPlayer != nullptr) && (initiator != *checkPlayer))
     {
         // Revert board
@@ -156,7 +156,7 @@ MoveResult chess::Board::switchPawnTo(const PieceType pieceType, Player &initiat
 
 
     // Check for self-check
-    const Player* const checkPlayer = getCheckPlayer();
+    Player* const checkPlayer = getCheckPlayer();
     if ((checkPlayer != nullptr) && (initiator != *checkPlayer))
     {
         // Revert piece
@@ -198,25 +198,73 @@ bool chess::Board::removePiece(const Piece &piece)
 
 Player *chess::Board::getCheckPlayer() const
 {
-    return nullptr;
-    // // For each player
-    // for (const Player& player : this->_players)
-    // {
-    //     // Check the board
-    //     for (size_t i = 0; i < BOARD_SIZE; i++)
-    //     {
-    //         for (size_t j = 0; j < BOARD_SIZE; j++)
-    //         {
-    //             const Piece* const piece = getPieceAt(Point(j, i));
+    for (Player* player : this->_players)
+    {
+        // The opposing king
+        const King& otherKing = player->getOther().getKing();
 
-    //         }
-    //     }
-    // }
+        // Vs. this player's pieces
+        for (const Piece* piece : player->getPieces())
+        {
+            if (util::isLegal(piece->validateMove(*otherKing.getPosition())))
+            {
+                // Piece may move to king - AKA check.
+                return player;
+            }
+        }
+    }
+
+    return nullptr;
 }
 
-Player *chess::Board::getCheckmatePlayer(const Player& checkPlayer) const
+Player *chess::Board::getCheckmatePlayer(Player& checkPlayer)
 {
-    return nullptr;
+    // In a checkmate, the king is unable to move at all.
+    King& otherKing = checkPlayer.getOther().getKing();
+    const Point orgPos = *otherKing.getPosition();
+
+    Player* result = &checkPlayer;
+
+    // King may move to 8 places at most
+    for (int i = 0; i < 8; i++)
+    {
+        Point dest = Point(i / 2, i % 2);
+
+        if (i > 3)
+        {
+            dest.x *= -1;
+            dest.y *= -1;
+        }
+
+        dest += orgPos;
+        Piece* destPiece = getPieceAt(dest);
+
+        if (!util::isLegal(otherKing.validateMove(dest)))
+            continue;
+        
+        _setPieceAt(dest, otherKing);
+        
+        // If checkPlayer is still at check after the king "escaped",
+        // it means this route is blocked.
+        const Player* checkPlayerAfter = getCheckPlayer();
+        if ((checkPlayerAfter == nullptr) || (*checkPlayerAfter != checkPlayer))
+        {
+            // King may escape; no checkmate.
+            result = nullptr;
+        }
+
+        if (destPiece != nullptr)
+        {
+            _setPieceAt(dest, *destPiece);
+        }
+
+        // A single route is all it takes.
+        if (result == nullptr)
+            break;
+    }
+    
+    _setPieceAt(orgPos, otherKing);
+    return result;
 }
 
 Piece* const (&chess::Board::getPieces() const)[Board::BOARD_SIZE][Board::BOARD_SIZE]
@@ -236,7 +284,7 @@ bool chess::Board::hasPieceAt(const Point &point) const
 
 Player &chess::Board::getPlayer(const int index)
 {
-    return this->_players[index];
+    return *this->_players[index];
 }
 
 Player &chess::Board::getPlayingPlayer()
@@ -281,12 +329,12 @@ bool chess::Board::_isValidPawnSwitch(const PieceType pieceType) const
     return false;
 }
 
-void chess::Board::_acknowledgeCheckResult(MoveResult &currRes, const Player &player) const
+void chess::Board::_acknowledgeCheckResult(MoveResult &currRes, const Player &player)
 {
     return _acknowledgeCheckResult(currRes, player, getCheckPlayer());
 }
 
-void chess::Board::_acknowledgeCheckResult(MoveResult &currRes, const Player &player, const Player *const checkPlayer) const
+void chess::Board::_acknowledgeCheckResult(MoveResult &currRes, const Player &player, Player *const checkPlayer)
 {
     if (checkPlayer == nullptr)
         return;
@@ -310,6 +358,12 @@ void chess::Board::_setPieceAt(const Point &pos, Piece &piece)
     piece.setPosition(pos);
 }
 
+void chess::Board::_moveInternal(Piece &piece, const Point pos)
+{
+    removePieceAt(*piece.getPosition());
+    _setPieceAt(pos, piece);
+}
+
 void chess::Board::_populateBoard()
 {
     for (size_t i = 0; i < BOARD_SIZE; i++)
@@ -324,7 +378,7 @@ void chess::Board::_populateBoard()
                 continue;
             }
 
-            Player& player = this->_players[(i < (BOARD_SIZE / 2)) ? 1 : 0];
+            Player& player = *this->_players[(i < (BOARD_SIZE / 2)) ? 1 : 0];
 
             PieceType pieceType;
 

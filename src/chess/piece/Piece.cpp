@@ -47,6 +47,10 @@ MoveResult chess::Piece::validateMove(const Point &destination) const
         return MoveResult::FRIENDLY_FIRE;
     }
 
+    // Can't eat le'king
+    if ((destPiece != nullptr) && (destPiece->getType() == PieceType::KING))
+        return MoveResult::ILLEGAL_MOVE;
+
     return MoveResult::LEGAL_MOVE;
 }
 
