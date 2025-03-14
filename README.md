@@ -1,8 +1,8 @@
 # Chess—Backend
 
-![Banner](./public/assets/banner.png)
-
 A move validator serving as a backend to the [Chess Frontend](https://github.com/StavWasPlayZ/chess-frontend).
+
+![Banner](./public/assets/banner.png)
 
 Communicates via **named pipes** in Windows and a **FIFO file** in Linux/Unix—depending on the active operating system at runtime.
 
