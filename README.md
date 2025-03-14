@@ -1,6 +1,6 @@
 # Chess—Backend
 
-A move validator serving as a backend to the [Chess Frontend](https://github.com/StavWasPlayZ/chess-frontend).
+A cross-platform move validator serving as a backend to the [Chess Frontend](https://github.com/StavWasPlayZ/chess-frontend).
 
 ![Banner](./public/assets/banner.png)
 
