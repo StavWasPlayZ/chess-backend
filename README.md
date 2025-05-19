@@ -4,7 +4,7 @@ A cross-platform move validator serving as a backend to the [Chess Frontend](htt
 
 ![Banner](./public/assets/banner.png)
 
-Communicates via **named pipes** in Windows and a **FIFO file** in Linux/Unix—depending on the active operating system at runtime.
+Communicates via **named pipes** in Windows and a **FIFO file** in Linux/Unix—depending on the active operating system.
 
 Submitted as part of the Magshimim National Cyber Program year 2, sem. 1 project.
 
